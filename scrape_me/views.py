@@ -4,6 +4,8 @@ from collections.abc import Iterable
 from typing import Any, Dict, List
 from urllib.parse import urlparse
 
+import math
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
@@ -143,6 +145,47 @@ def home(request):
 
 @require_GET
 def get_recipes(request):
-    """Return a JSON list of stored recipes."""
-    recipes = [serialize_recipe(recipe) for recipe in Recipe.objects.all()]
-    return JsonResponse({"recipes": recipes})
+    """Return a JSON list of stored recipes with optional search and pagination."""
+
+    query = (request.GET.get("q") or "").strip()
+    page_raw = request.GET.get("page", "1")
+    page_size_raw = request.GET.get("page_size", "10")
+
+    try:
+        page = int(page_raw)
+        if page < 1:
+            raise ValueError
+    except (TypeError, ValueError):
+        return JsonResponse({"error": "Invalid 'page' parameter. Must be a positive integer."}, status=400)
+
+    try:
+        page_size = int(page_size_raw)
+        if page_size < 1 or page_size > 100:
+            raise ValueError
+    except (TypeError, ValueError):
+        return JsonResponse({"error": "Invalid 'page_size' parameter. Must be between 1 and 100."}, status=400)
+
+    recipes_qs = Recipe.objects.all()
+    if query:
+        recipes_qs = recipes_qs.filter(title__icontains=query)
+
+    total_items = recipes_qs.count()
+    total_pages = math.ceil(total_items / page_size) if total_items else 0
+
+    offset = (page - 1) * page_size
+    recipes_slice = list(recipes_qs[offset : offset + page_size])
+
+    payload = {
+        "query": query,
+        "results": [serialize_recipe(recipe) for recipe in recipes_slice],
+        "pagination": {
+            "page": page,
+            "page_size": page_size,
+            "total_items": total_items,
+            "total_pages": total_pages,
+            "has_next": offset + page_size < total_items,
+            "has_previous": page > 1 and total_items > 0,
+        },
+    }
+
+    return JsonResponse(payload)
