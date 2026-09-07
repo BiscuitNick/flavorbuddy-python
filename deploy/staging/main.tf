@@ -1,4 +1,7 @@
 terraform {
+  # Configure a protected operator path with init -backend-config=path=... .
+  # State has no secret values; do not leave it in the checkout or /tmp.
+  backend "local" {}
   required_version = ">= 1.5"
   required_providers {
     google = { source = "hashicorp/google", version = "~> 7.0" }

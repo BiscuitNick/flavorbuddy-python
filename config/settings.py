@@ -316,7 +316,12 @@ if PRIVATE_PHOTO_BACKEND == "gcs":
         raise ImproperlyConfigured("Private photos require a separate private bucket")
     STORAGES["private_photos"] = {
         "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
-        "OPTIONS": {"bucket_name": private_bucket, "default_acl": None, "querystring_auth": True, "timeout": 30},
+        "OPTIONS": {
+            "bucket_name": private_bucket,
+            "default_acl": None,
+            "querystring_auth": True,
+            "object_parameters": {"cache_control": "private, no-store"},
+        },
     }
 elif PRIVATE_PHOTO_BACKEND == "local" and not PRODUCTION:
     STORAGES["private_photos"] = {

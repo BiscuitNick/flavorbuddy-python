@@ -1,14 +1,25 @@
 # FlavorBuddy → FlavorGirls: simplified integration handoff
 
-## Status
+## Current implemented subset — September 7
 
-This is a proposed contract, not a deployed API guarantee.
-The draft/finalized lifecycle and private/public visibility are implemented locally on one Recipe model. Sharing retains identity; variations start as private drafts.
-Current integration v1 supports authenticated catalog listing and recipe detail,
-with limit/after pagination. It does not support search, rating sorting, feedback writes, or AI recipe generation. FlavorBuddy's own
-starter endpoint has basic title search; share that search service going forward.
-Existing gated AI code extracts recipes from supplied text; it does not generate
-new recipes from a request. No paid AI feature was enabled by this handoff.
+Read-only v2 search and UUID detail are implemented. See the authoritative
+[OpenAPI contract](../../api/catalog-v2.openapi.json) and
+[release evidence](../../execution/07-release-and-v2.md).
+
+Supported: phrase q across title/description/ingredient source text, relevance/newest/
+quickest, limit/cursor, max_total_minutes, stable recipe-scoped ingredient/step IDs,
+source-preserving RecipeDocumentV1 and unavailable responses. Unsupported parameters
+are rejected. Feedback is null; tags, rating sorts, votes/reports and generation below
+remain proposals. Schema validation does not infer ingredient quantities or cooking facts.
+
+Obtain catalog:read tokens at `/api/integrations/v1/oauth/token` with the exact v2
+resource audience (`<PROJECT_URL>/api/integrations/v2/`). V1 tokens stay v1-only;
+registered applications share the same grants and quotas across versions.
+Search and detail only expose explicit licensed-starter catalog membership.
+The real FlavorGirls server has not been configured or contacted by this implementation.
+
+The remaining sections describe the broader future contract. Implement only the
+supported subset above until another increment is authorized.
 
 ## Recipe identity and curation
 
@@ -24,7 +35,7 @@ new recipes from a request. No paid AI feature was enabled by this handoff.
 
 ## Search → choose → cook
 
-GET /api/integrations/v2/catalogs/{catalog}/recipes?q=meatballs&sort=top_rated&limit=12
+GET /api/integrations/v2/catalogs/{catalog}/recipes?q=meatballs&sort=relevance&limit=12
 Authorization: Bearer <app token>
 
 Proposed parameters:

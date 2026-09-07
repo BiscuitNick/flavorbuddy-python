@@ -307,8 +307,6 @@
     },
     "schemas": {
       "RecipeDocumentV1": {
-        "$schema": "https://json-schema.org/draft/2020-12/schema",
-        "$id": "https://flavorbuddy-staging-560489769953.us-central1.run.app/api/integrations/v2/recipe-document.schema.json",
         "title": "RecipeDocumentV1",
         "description": "Immutable recipe content. Null means unknown/unassessed; empty arrays mean an explicitly assessed absence. Publication, validation results, thumbs feedback and report-driven availability are separate server records. This schema cannot prove culinary correctness, immutable storage or referential integrity.",
         "type": "object",
@@ -398,7 +396,7 @@
               "quantity": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/Quantity"
+                    "$ref": "#/components/schemas/Quantity"
                   },
                   {
                     "type": "null"
@@ -441,7 +439,7 @@
               "sources": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/Source"
+                  "$ref": "#/components/schemas/Source"
                 },
                 "minItems": 0,
                 "maxItems": 20
@@ -477,7 +475,7 @@
               {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/Group"
+                  "$ref": "#/components/schemas/Group"
                 },
                 "minItems": 0,
                 "maxItems": 100
@@ -490,7 +488,7 @@
           "ingredients": {
             "type": "array",
             "items": {
-              "$ref": "#/$defs/Ingredient"
+              "$ref": "#/components/schemas/Ingredient"
             },
             "minItems": 1,
             "maxItems": 200
@@ -500,7 +498,7 @@
               {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/Group"
+                  "$ref": "#/components/schemas/Group"
                 },
                 "minItems": 0,
                 "maxItems": 100
@@ -513,7 +511,7 @@
           "steps": {
             "type": "array",
             "items": {
-              "$ref": "#/$defs/Step"
+              "$ref": "#/components/schemas/Step"
             },
             "minItems": 1,
             "maxItems": 400
@@ -523,7 +521,7 @@
               {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/Equipment"
+                  "$ref": "#/components/schemas/Equipment"
                 },
                 "minItems": 0,
                 "maxItems": 100
@@ -560,7 +558,7 @@
               "prep": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/Duration"
+                    "$ref": "#/components/schemas/Duration"
                   },
                   {
                     "type": "null"
@@ -570,7 +568,7 @@
               "cook": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/Duration"
+                    "$ref": "#/components/schemas/Duration"
                   },
                   {
                     "type": "null"
@@ -580,7 +578,7 @@
               "rest": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/Duration"
+                    "$ref": "#/components/schemas/Duration"
                   },
                   {
                     "type": "null"
@@ -590,7 +588,7 @@
               "total": {
                 "anyOf": [
                   {
-                    "$ref": "#/$defs/Duration"
+                    "$ref": "#/components/schemas/Duration"
                   },
                   {
                     "type": "null"
@@ -604,7 +602,7 @@
               {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/Image"
+                  "$ref": "#/components/schemas/Image"
                 },
                 "minItems": 0,
                 "maxItems": 25
@@ -619,7 +617,7 @@
               {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/Tag"
+                  "$ref": "#/components/schemas/Tag"
                 },
                 "maxItems": 30,
                 "uniqueItems": true
@@ -629,590 +627,686 @@
               }
             ]
           }
-        },
-        "$defs": {
-          "Quantity": {
-            "oneOf": [
+        }
+      },
+      "Quantity": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "value"
+            ],
+            "properties": {
+              "kind": {
+                "const": "exact"
+              },
+              "value": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "minimum",
+              "maximum"
+            ],
+            "properties": {
+              "kind": {
+                "const": "range"
+              },
+              "minimum": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+              },
+              "maximum": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+              }
+            }
+          }
+        ]
+      },
+      "Unit": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "original_text",
+          "code"
+        ],
+        "properties": {
+          "original_text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "\\S"
+          },
+          "code": {
+            "anyOf": [
               {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "kind",
-                  "value"
-                ],
-                "properties": {
-                  "kind": {
-                    "const": "exact"
-                  },
-                  "value": {
-                    "type": "string",
-                    "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
-                  }
-                }
+                "enum": [
+                  "g",
+                  "kg",
+                  "mg",
+                  "mL",
+                  "L",
+                  "oz_mass",
+                  "lb_mass",
+                  "tsp_us",
+                  "tbsp_us",
+                  "cup_us",
+                  "tsp_metric",
+                  "tbsp_metric",
+                  "cup_metric",
+                  "cup_imperial",
+                  "count"
+                ]
               },
               {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "kind",
-                  "minimum",
-                  "maximum"
-                ],
-                "properties": {
-                  "kind": {
-                    "const": "range"
-                  },
-                  "minimum": {
-                    "type": "string",
-                    "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
-                  },
-                  "maximum": {
-                    "type": "string",
-                    "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
-                  }
-                }
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "Duration": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "minimum_seconds",
+          "maximum_seconds",
+          "original_text",
+          "basis"
+        ],
+        "properties": {
+          "minimum_seconds": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 31536000
+          },
+          "maximum_seconds": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 31536000
+          },
+          "original_text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
               }
             ]
           },
-          "Unit": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "original_text",
-              "code"
-            ],
-            "properties": {
-              "original_text": {
+          "basis": {
+            "enum": [
+              "source_explicit",
+              "editor_authored"
+            ]
+          }
+        }
+      },
+      "Group": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^grp-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "\\S"
+          }
+        }
+      },
+      "SourceRef": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "locator"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "pattern": "^src-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+          },
+          "locator": {
+            "anyOf": [
+              {
                 "type": "string",
                 "minLength": 1,
-                "maxLength": 80,
+                "maxLength": 1000,
                 "pattern": "\\S"
               },
-              "code": {
-                "anyOf": [
-                  {
-                    "enum": [
-                      "g",
-                      "kg",
-                      "mg",
-                      "mL",
-                      "L",
-                      "oz_mass",
-                      "lb_mass",
-                      "tsp_us",
-                      "tbsp_us",
-                      "cup_us",
-                      "tsp_metric",
-                      "tbsp_metric",
-                      "cup_metric",
-                      "cup_imperial",
-                      "count"
-                    ]
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
+              {
+                "type": "null"
               }
-            }
+            ]
+          }
+        }
+      },
+      "Ingredient": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "original_text",
+          "name",
+          "quantity",
+          "unit",
+          "preparation",
+          "group_id",
+          "optional",
+          "source_refs"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^ing-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
           },
-          "Duration": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "minimum_seconds",
-              "maximum_seconds",
-              "original_text",
-              "basis"
-            ],
-            "properties": {
-              "minimum_seconds": {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 31536000
+          "original_text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "\\S"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "pattern": "\\S"
               },
-              "maximum_seconds": {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 31536000
-              },
-              "original_text": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 500,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "basis": {
-                "enum": [
-                  "source_explicit",
-                  "editor_authored"
-                ]
+              {
+                "type": "null"
               }
-            }
+            ]
           },
-          "Group": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "id",
-              "label"
-            ],
-            "properties": {
-              "id": {
+          "quantity": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Quantity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Unit"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "preparation": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "group_id": {
+            "anyOf": [
+              {
                 "type": "string",
                 "pattern": "^grp-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
               },
-              "label": {
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "optional": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceRef"
+            },
+            "minItems": 0,
+            "maxItems": 20
+          }
+        }
+      },
+      "Equipment": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "original_text",
+          "specification",
+          "source_refs"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^eq-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "\\S"
+          },
+          "original_text": {
+            "anyOf": [
+              {
                 "type": "string",
                 "minLength": 1,
-                "maxLength": 200,
+                "maxLength": 1000,
                 "pattern": "\\S"
-              }
-            }
-          },
-          "SourceRef": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "source_id",
-              "locator"
-            ],
-            "properties": {
-              "source_id": {
-                "type": "string",
-                "pattern": "^src-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
               },
-              "locator": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 1000,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
+              {
+                "type": "null"
               }
-            }
+            ]
           },
-          "Ingredient": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "id",
-              "original_text",
-              "name",
-              "quantity",
-              "unit",
-              "preparation",
-              "group_id",
-              "optional",
-              "source_refs"
-            ],
-            "properties": {
-              "id": {
-                "type": "string",
-                "pattern": "^ing-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
-              },
-              "original_text": {
+          "specification": {
+            "anyOf": [
+              {
                 "type": "string",
                 "minLength": 1,
-                "maxLength": 2000,
+                "maxLength": 1000,
                 "pattern": "\\S"
               },
-              "name": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 200,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceRef"
+            },
+            "minItems": 0,
+            "maxItems": 20
+          }
+        }
+      },
+      "IngredientRef": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ingredient_id",
+          "portion_quantity",
+          "portion_unit",
+          "original_text"
+        ],
+        "properties": {
+          "ingredient_id": {
+            "type": "string",
+            "pattern": "^ing-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+          },
+          "portion_quantity": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Quantity"
               },
-              "quantity": {
-                "anyOf": [
-                  {
-                    "$ref": "#/$defs/Quantity"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "portion_unit": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Unit"
               },
-              "unit": {
-                "anyOf": [
-                  {
-                    "$ref": "#/$defs/Unit"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "original_text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000,
+                "pattern": "\\S"
               },
-              "preparation": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 1000,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "Timer": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "duration",
+          "start_mode",
+          "completion_condition"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^timer-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "\\S"
+          },
+          "duration": {
+            "$ref": "#/components/schemas/Duration"
+          },
+          "start_mode": {
+            "const": "user_confirmation"
+          },
+          "completion_condition": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000,
+                "pattern": "\\S"
               },
-              "group_id": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "pattern": "^grp-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "Step": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "position",
+          "original_text",
+          "instruction",
+          "group_id",
+          "ingredient_refs",
+          "unresolved_ingredient_text",
+          "equipment_refs",
+          "unresolved_equipment_text",
+          "timers",
+          "source_refs"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^step-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 400
+          },
+          "original_text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 10000,
+            "pattern": "\\S"
+          },
+          "instruction": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 10000,
+            "pattern": "\\S"
+          },
+          "group_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^grp-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
               },
-              "optional": {
-                "anyOf": [
-                  {
-                    "type": "boolean"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "source_refs": {
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ingredient_refs": {
+            "anyOf": [
+              {
                 "type": "array",
                 "items": {
-                  "$ref": "#/$defs/SourceRef"
+                  "$ref": "#/components/schemas/IngredientRef"
+                },
+                "minItems": 0,
+                "maxItems": 200
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unresolved_ingredient_text": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "pattern": "\\S"
+                },
+                "minItems": 0,
+                "maxItems": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "equipment_refs": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^eq-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+                },
+                "maxItems": 100,
+                "uniqueItems": true
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unresolved_equipment_text": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200,
+                  "pattern": "\\S"
+                },
+                "minItems": 0,
+                "maxItems": 100
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "timers": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Timer"
                 },
                 "minItems": 0,
                 "maxItems": 20
-              }
-            }
-          },
-          "Equipment": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "id",
-              "name",
-              "original_text",
-              "specification",
-              "source_refs"
-            ],
-            "properties": {
-              "id": {
-                "type": "string",
-                "pattern": "^eq-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
               },
-              "name": {
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceRef"
+            },
+            "minItems": 0,
+            "maxItems": 20
+          }
+        }
+      },
+      "Source": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "url",
+          "author",
+          "repository_url",
+          "repository_revision",
+          "path",
+          "source_sha256",
+          "license",
+          "legacy_locator"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^src-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https?://"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "author": {
+            "anyOf": [
+              {
                 "type": "string",
                 "minLength": 1,
-                "maxLength": 200,
+                "maxLength": 500,
                 "pattern": "\\S"
               },
-              "original_text": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 1000,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "specification": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 1000,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "source_refs": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/$defs/SourceRef"
-                },
-                "minItems": 0,
-                "maxItems": 20
+              {
+                "type": "null"
               }
-            }
+            ]
           },
-          "IngredientRef": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "ingredient_id",
-              "portion_quantity",
-              "portion_unit",
-              "original_text"
-            ],
-            "properties": {
-              "ingredient_id": {
+          "repository_url": {
+            "anyOf": [
+              {
                 "type": "string",
-                "pattern": "^ing-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+                "format": "uri",
+                "pattern": "^https?://"
               },
-              "portion_quantity": {
-                "anyOf": [
-                  {
-                    "$ref": "#/$defs/Quantity"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "portion_unit": {
-                "anyOf": [
-                  {
-                    "$ref": "#/$defs/Unit"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "original_text": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 1000,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
+              {
+                "type": "null"
               }
-            }
+            ]
           },
-          "Timer": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "id",
-              "label",
-              "duration",
-              "start_mode",
-              "completion_condition"
-            ],
-            "properties": {
-              "id": {
-                "type": "string",
-                "pattern": "^timer-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
-              },
-              "label": {
+          "repository_revision": {
+            "anyOf": [
+              {
                 "type": "string",
                 "minLength": 1,
-                "maxLength": 200,
+                "maxLength": 100,
                 "pattern": "\\S"
               },
-              "duration": {
-                "$ref": "#/$defs/Duration"
-              },
-              "start_mode": {
-                "const": "user_confirmation"
-              },
-              "completion_condition": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 1000,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
+              {
+                "type": "null"
               }
-            }
+            ]
           },
-          "Step": {
+          "path": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_sha256": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "license": {
             "type": "object",
             "additionalProperties": false,
             "required": [
-              "id",
-              "position",
-              "original_text",
-              "instruction",
-              "group_id",
-              "ingredient_refs",
-              "unresolved_ingredient_text",
-              "equipment_refs",
-              "unresolved_equipment_text",
-              "timers",
-              "source_refs"
-            ],
-            "properties": {
-              "id": {
-                "type": "string",
-                "pattern": "^step-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
-              },
-              "position": {
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 400
-              },
-              "original_text": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 10000,
-                "pattern": "\\S"
-              },
-              "instruction": {
-                "type": "string",
-                "minLength": 1,
-                "maxLength": 10000,
-                "pattern": "\\S"
-              },
-              "group_id": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "pattern": "^grp-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "ingredient_refs": {
-                "anyOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/$defs/IngredientRef"
-                    },
-                    "minItems": 0,
-                    "maxItems": 200
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "unresolved_ingredient_text": {
-                "anyOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 200,
-                      "pattern": "\\S"
-                    },
-                    "minItems": 0,
-                    "maxItems": 100
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "equipment_refs": {
-                "anyOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "pattern": "^eq-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
-                    },
-                    "maxItems": 100,
-                    "uniqueItems": true
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "unresolved_equipment_text": {
-                "anyOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 200,
-                      "pattern": "\\S"
-                    },
-                    "minItems": 0,
-                    "maxItems": 100
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "timers": {
-                "anyOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/$defs/Timer"
-                    },
-                    "minItems": 0,
-                    "maxItems": 20
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "source_refs": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/$defs/SourceRef"
-                },
-                "minItems": 0,
-                "maxItems": 20
-              }
-            }
-          },
-          "Source": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "id",
+              "identifier",
               "url",
-              "author",
-              "repository_url",
-              "repository_revision",
-              "path",
-              "source_sha256",
-              "license",
-              "legacy_locator"
+              "rights_basis"
             ],
             "properties": {
-              "id": {
-                "type": "string",
-                "pattern": "^src-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+              "identifier": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100,
+                    "pattern": "\\S"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               },
               "url": {
                 "anyOf": [
@@ -1226,228 +1320,130 @@
                   }
                 ]
               },
-              "author": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 500,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "repository_url": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "format": "uri",
-                    "pattern": "^https?://"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "repository_revision": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 100,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "path": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 1000,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "source_sha256": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "pattern": "^[0-9a-f]{64}$"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "license": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "identifier",
-                  "url",
-                  "rights_basis"
-                ],
-                "properties": {
-                  "identifier": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "minLength": 1,
-                        "maxLength": 100,
-                        "pattern": "\\S"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "url": {
-                    "anyOf": [
-                      {
-                        "type": "string",
-                        "format": "uri",
-                        "pattern": "^https?://"
-                      },
-                      {
-                        "type": "null"
-                      }
-                    ]
-                  },
-                  "rights_basis": {
-                    "enum": [
-                      "source_license",
-                      "user_assertion",
-                      "unknown"
-                    ]
-                  }
-                }
-              },
-              "legacy_locator": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 1000,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
+              "rights_basis": {
+                "enum": [
+                  "source_license",
+                  "user_assertion",
+                  "unknown"
                 ]
               }
             }
           },
-          "Image": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "id",
-              "asset_id",
-              "sha256",
-              "alt_text",
-              "origin",
-              "source_url",
-              "license"
-            ],
-            "properties": {
-              "id": {
+          "legacy_locator": {
+            "anyOf": [
+              {
                 "type": "string",
-                "pattern": "^img-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
+                "minLength": 1,
+                "maxLength": 1000,
+                "pattern": "\\S"
               },
-              "asset_id": {
-                "type": "string",
-                "format": "uuid"
-              },
-              "sha256": {
-                "type": "string",
-                "pattern": "^[0-9a-f]{64}$"
-              },
-              "alt_text": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 500,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "origin": {
-                "enum": [
-                  "source",
-                  "user_upload",
-                  "generated_illustration"
-                ]
-              },
-              "source_url": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "format": "uri",
-                    "pattern": "^https?://"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
-              },
-              "license": {
-                "anyOf": [
-                  {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 200,
-                    "pattern": "\\S"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
+              {
+                "type": "null"
               }
-            }
+            ]
+          }
+        }
+      },
+      "Image": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "asset_id",
+          "sha256",
+          "alt_text",
+          "origin",
+          "source_url",
+          "license"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^img-[A-Za-z0-9][A-Za-z0-9_-]{0,63}$"
           },
-          "Tag": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": [
-              "vocabulary",
-              "code"
-            ],
-            "properties": {
-              "vocabulary": {
-                "const": "flavorbuddy-tags/1"
+          "asset_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "alt_text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500,
+                "pattern": "\\S"
               },
-              "code": {
-                "enum": [
-                  "course:breakfast",
-                  "course:lunch",
-                  "course:dinner",
-                  "course:dessert",
-                  "course:snack",
-                  "course:drink",
-                  "method:bake",
-                  "method:boil",
-                  "method:fry",
-                  "method:mix",
-                  "method:no-cook",
-                  "dish:salad",
-                  "dish:soup",
-                  "dish:bread"
-                ]
+              {
+                "type": "null"
               }
-            }
+            ]
+          },
+          "origin": {
+            "enum": [
+              "source",
+              "user_upload",
+              "generated_illustration"
+            ]
+          },
+          "source_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https?://"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "license": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "vocabulary",
+          "code"
+        ],
+        "properties": {
+          "vocabulary": {
+            "const": "flavorbuddy-tags/1"
+          },
+          "code": {
+            "enum": [
+              "course:breakfast",
+              "course:lunch",
+              "course:dinner",
+              "course:dessert",
+              "course:snack",
+              "course:drink",
+              "method:bake",
+              "method:boil",
+              "method:fry",
+              "method:mix",
+              "method:no-cook",
+              "dish:salad",
+              "dish:soup",
+              "dish:bread"
+            ]
           }
         }
       }
