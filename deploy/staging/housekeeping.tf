@@ -15,7 +15,8 @@ resource "google_cloud_run_v2_job" "housekeeping" {
       }
       containers {
         image   = var.image
-        command = ["python", "manage.py", "run_housekeeping"]
+        command = ["python"]
+        args    = ["manage.py", "run_housekeeping"]
         resources { limits = { cpu = "1", memory = "512Mi" } }
         volume_mounts {
           name       = "cloudsql"
