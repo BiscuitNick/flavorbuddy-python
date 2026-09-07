@@ -11,6 +11,20 @@ class RecipeType(models.TextChoices):
     AI_GENERATED = "ai_generated", "AI Generated"
 
 
+class FirebaseIdentity(models.Model):
+    user = models.OneToOneField("auth.User", on_delete=models.CASCADE)
+    project_id = models.CharField(max_length=128)
+    uid = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["project_id", "uid"], name="firebase_project_uid"
+            )
+        ]
+
+
 class Recipe(models.Model):
     """Persisted recipe data captured from external sources."""
 

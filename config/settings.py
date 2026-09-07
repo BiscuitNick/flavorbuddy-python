@@ -130,6 +130,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "scrape_me.firebase_auth.FirebaseSessionMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -244,6 +245,27 @@ EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", True)
+
+# Public Firebase web configuration is served at /api/v1/me, not baked into JS.
+FIREBASE_PROJECT_ID = os.environ.get("FIREBASE_PROJECT_ID", "")
+FIREBASE_API_KEY = os.environ.get("FIREBASE_API_KEY", "")
+FIREBASE_AUTH_DOMAIN = os.environ.get("FIREBASE_AUTH_DOMAIN", "")
+FIREBASE_APP_ID = os.environ.get("FIREBASE_APP_ID", "")
+FIREBASE_AUTH_EMULATOR_HOST = os.environ.get("FIREBASE_AUTH_EMULATOR_HOST", "")
+FIREBASE_ENABLED = bool(FIREBASE_PROJECT_ID)
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups" if FIREBASE_ENABLED else "same-origin"
+LOCAL_AUTH_ENABLED = env_bool("LOCAL_AUTH_ENABLED", not FIREBASE_ENABLED)
+FIREBASE_SESSION_SECONDS = 12 * 60 * 60
+if FIREBASE_ENABLED and not all(
+    (FIREBASE_API_KEY, FIREBASE_AUTH_DOMAIN, FIREBASE_APP_ID)
+):
+    raise ImproperlyConfigured(
+        "Firebase requires project ID, API key, auth domain and app ID"
+    )
+if PRODUCTION and FIREBASE_AUTH_EMULATOR_HOST:
+    raise ImproperlyConfigured("Firebase Auth emulator is forbidden in production")
+if FIREBASE_AUTH_EMULATOR_HOST and not FIREBASE_PROJECT_ID.startswith("demo-"):
+    raise ImproperlyConfigured("Firebase Auth emulator requires an isolated demo- project")
 
 STATICFILES_DIRS = (
     [("app", BASE_DIR / "frontend" / "dist")]

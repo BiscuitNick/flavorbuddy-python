@@ -2,7 +2,8 @@
 
 The product owner approved roadmap reconciliation, A3 and focused v2 integration.
 The feature/API work is implemented and deployed to IAM-protected managed staging.
-Managed restore and compatible rollback have passed. SMTP, real-client onboarding
+Managed restore and compatible rollback have passed. This is historical release evidence;
+[the Firebase increment](08-firebase-auth.md) replaces SMTP setup. Real-client onboarding
 and observed pilot use remain explicitly unfinished.
 
 ## Implemented
@@ -94,7 +95,8 @@ again on that final revision; Terraform reports **no infrastructure drift**.
 
 ## Remaining inputs and limits
 
-- SMTP provider, sender and credentials have not been supplied. Recovery is visibly disabled;
+- At this release, SMTP was not configured. The subsequent owner decision replaces it
+  with [Firebase Google sign-in](08-firebase-auth.md). Recovery was visibly disabled;
   real email delivery/expiry/single-use checks remain an A3 gate. No email was sent.
 - Real FlavorGirls server identity/access and pilot browser login have not been configured.
   This increment provides the server contract and staging smoke, not a deployed second app.

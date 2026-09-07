@@ -48,6 +48,15 @@ private_override = override_settings(
     }
 )
 private_override.enable()
+if settings.FIREBASE_ENABLED:
+    from scrape_me.models import Recipe
+
+    for viewport in ("desktop", "mobile"):
+        email = f"legacy-{viewport}@example.com"
+        user = get_user_model().objects.create_user(
+            username=email, email=email, password="Legacy-test-password-892!"
+        )
+        Recipe.objects.create(owner=user, title="Existing family recipe")
 # Independent worker process uses the same disposable DB and private test directory.
 worker = subprocess.Popen(
     [

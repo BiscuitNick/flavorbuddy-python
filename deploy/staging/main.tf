@@ -44,6 +44,16 @@ variable "from_email" {
   type    = string
   default = "noreply@localhost"
 }
+variable "firebase_enabled" {
+  type        = bool
+  default     = false
+  description = "Enable after the Firebase Google provider is configured and verified"
+}
+variable "firebase_web_config" {
+  type        = map(string)
+  default     = {}
+  description = "Public web app configuration: apiKey, authDomain and appId"
+}
 # Secret versions and SQL login are populated out of band, so Terraform state
 # never contains application, database or SMTP passwords.
 variable "secret_versions" {
@@ -51,7 +61,7 @@ variable "secret_versions" {
   description = "Numeric versions for fb-staging-django-key, fb-staging-db-password and fb-staging-smtp-password"
 }
 resource "google_project_service" "apis" {
-  for_each           = toset(["run.googleapis.com", "sqladmin.googleapis.com", "secretmanager.googleapis.com", "artifactregistry.googleapis.com", "cloudscheduler.googleapis.com"])
+  for_each           = toset(["run.googleapis.com", "sqladmin.googleapis.com", "secretmanager.googleapis.com", "artifactregistry.googleapis.com", "cloudscheduler.googleapis.com", "firebase.googleapis.com", "identitytoolkit.googleapis.com"])
   service            = each.value
   disable_on_destroy = false
 }
@@ -137,6 +147,11 @@ locals {
     EMAIL_HOST             = var.smtp_host
     EMAIL_HOST_USER        = var.smtp_user
     DEFAULT_FROM_EMAIL     = var.from_email
+    FIREBASE_PROJECT_ID    = var.firebase_enabled ? var.project : ""
+    FIREBASE_API_KEY       = lookup(var.firebase_web_config, "apiKey", "")
+    FIREBASE_AUTH_DOMAIN   = lookup(var.firebase_web_config, "authDomain", "")
+    FIREBASE_APP_ID        = lookup(var.firebase_web_config, "appId", "")
+    LOCAL_AUTH_ENABLED     = var.firebase_enabled ? "false" : "true"
   }
   secrets = merge({
     DJANGO_SECRET_KEY = "fb-staging-django-key"

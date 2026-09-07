@@ -13,3 +13,6 @@ media/
 private-media/
 **/.terraform/
 **/*.tfstate*
+.firebase/
+*-debug.log
+frontend/e2e-firebase/

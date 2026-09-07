@@ -60,19 +60,31 @@ the lock, or `.venv/bin/python -m pip install -r requirements.lock` in a pip ven
 
 ## Account and API contract
 
-Django sessions with CSRF on every mutation, including login. `GET /api/v1/me`
-returns a CSRF token and the current user (or null); send `X-CSRFToken` on POST,
-PATCH, and DELETE. The token rotates on login. Email is the normalized unique
-username in the existing Django User model. Email verification is not enabled for
-this local alpha. SMTP recovery is exposed only when configured; Django's expiring,
-single-use reset tokens and password validators are used. Account mutations are
-rate-limited in PostgreSQL by address and account identity.
+Google sign-in through Firebase is the selected account provider. The browser sends
+its Firebase ID token to `POST /api/v1/auth/firebase`; Django verifies the project,
+signature, verified Google identity, revocation and recent sign-in before issuing a
+12-hour HttpOnly session. Firebase credentials stay in browser memory only; the
+provider session cookie is held inside the server-side Django session. Firebase
+revocation/disablement is checked on each authenticated request. Google handles
+password recovery; no SMTP provider is needed. See [Firebase setup](docs/operations/firebase-auth.md).
+
+Django continues to own recipe/pantry/photo ownership and CSRF protection. `GET
+/api/v1/me` returns the current user, CSRF token and public Firebase configuration.
+Send `X-CSRFToken` on mutations; the token rotates on login. Existing local accounts
+must prove their current password once to link Google and retain their original
+user ID and data. Linking disables the local password. Email matches alone never
+merge accounts. Account requests remain rate-limited in PostgreSQL.
+
+Without Firebase configuration, local development keeps the existing password
+flow. With Firebase configured, local password login/registration/reset endpoints
+are disabled by default. The FlavorGirls client-credentials OAuth API is separate.
 
 | Route | Behavior |
 | --- | --- |
-| `GET /api/v1/me` | Session identity, CSRF bootstrap, recovery availability |
-| `POST /api/v1/auth/register`, `/login`, `/logout` | Account/session lifecycle |
-| `POST /api/v1/auth/reset`, `/reset-confirm` | SMTP password recovery |
+| `GET /api/v1/me` | Session identity, CSRF bootstrap, public Firebase config and available login modes |
+| `POST /api/v1/auth/firebase` | Verified Google sign-in; optional `legacy_password` for one-time linking |
+| `POST /api/v1/auth/logout` | End this browser's session |
+| `POST /api/v1/auth/register`, `/login`, `/reset`, `/reset-confirm` | Legacy/local only when `LOCAL_AUTH_ENABLED=true` |
 | `POST /api/v1/imports` | `{key: UUID, mode: url/text/manual, input: string}`; synchronous owned preview |
 | `GET /api/v1/imports/{id}` | Owned preview state/content/error |
 | `GET/POST /api/v1/recipes` | Private paginated title search / validated save |

@@ -227,3 +227,8 @@ media/
 *.tfvars
 *.tfplan
 private-media/
+
+# Local Firebase emulator logs and state
+.firebase/
+firebase-debug*.log
+*-debug.log

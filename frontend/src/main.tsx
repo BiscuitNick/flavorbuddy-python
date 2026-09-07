@@ -6,6 +6,7 @@ import type { User } from "./api";
 import { go } from "./navigation";
 import { ErrorBox } from "./components/ErrorBox";
 import { Welcome, Auth, Reset } from "./features/auth/Auth";
+import type { FirebaseConfig } from "./features/auth/firebase";
 import { Sample, ImportFlow } from "./features/import/ImportFlow";
 import { Library } from "./features/library/Library";
 import { StarterCatalog } from "./features/starter/StarterCatalog";
@@ -33,6 +34,8 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState<unknown>(null);
   const [recovery, setRecovery] = useState(false);
+  const [firebase, setFirebase] = useState<FirebaseConfig | null>(null);
+  const [localAuth, setLocalAuth] = useState(false);
   const heading = useRef<HTMLElement>(null);
   useEffect(() => {
     const expired = () => setUser(null);
@@ -40,10 +43,17 @@ function App() {
     return () => window.removeEventListener("fb:session-expired", expired);
   }, []);
   useEffect(() => {
-    api<{ user: User | null; recovery_available: boolean }>("me")
+    api<{
+      user: User | null;
+      recovery_available: boolean;
+      firebase?: FirebaseConfig | null;
+      local_auth_enabled?: boolean;
+    }>("me")
       .then((data) => {
         setUser(data.user);
         setRecovery(data.recovery_available);
+        setFirebase(data.firebase || null);
+        setLocalAuth(data.local_auth_enabled ?? true);
       })
       .catch(setAuthError)
       .finally(() => setLoading(false));
@@ -113,10 +123,15 @@ function App() {
           <p className="loading" role="status">
             Opening your recipe box…
           </p>
-        ) : route.startsWith("/reset/") ? (
+        ) : route.startsWith("/reset/") && localAuth ? (
           <Reset route={route} />
         ) : !user && requiresAuth ? (
-          <Auth onAuth={setUser} recovery={recovery} />
+          <Auth
+            onAuth={setUser}
+            recovery={recovery}
+            firebase={firebase}
+            localAuth={localAuth}
+          />
         ) : route.startsWith("/starters") ? (
           <StarterCatalog
             key={`${user?.id ?? "guest"}:${route}`}
@@ -128,7 +143,12 @@ function App() {
         ) : route === "/sample" ? (
           <Sample user={user} />
         ) : !user ? (
-          <Welcome onAuth={setUser} recovery={recovery} />
+          <Welcome
+            onAuth={setUser}
+            recovery={recovery}
+            firebase={firebase}
+            localAuth={localAuth}
+          />
         ) : route === "/pantry" ? (
           <Pantry key={user.id} />
         ) : route === "/import" ? (

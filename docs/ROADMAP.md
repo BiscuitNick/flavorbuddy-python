@@ -6,12 +6,15 @@ is retained for context; its dates, estimates, status tables and ordering are su
 Implementation evidence lives in [execution](execution/README.md).
 
 **Current outcome:** items 1 and 3 are implemented; protected staging, managed restore
-and rollback are verified. A3 remains partially open for SMTP delivery and pilot access/
-observations. The real FlavorGirls server has not been connected.
+and rollback are verified. A3 remains partially open for hosted Firebase Google sign-in and pilot access/
+observations. SMTP setup has been replaced by Firebase authentication. The real FlavorGirls server has not been connected.
 
 ## Product decisions
 
 - Django/PostgreSQL owns recipe data; React provides the mobile web experience.
+- Firebase Authentication with Google sign-in owns user identity and recovery. No
+  app-owned passwords or SMTP setup are needed in the selected hosted flow.
+  FlavorGirls retains its separate, implemented client-credentials OAuth identity.
 - One recipe UUID identifies one finalized, immutable recipe. Drafts are private and
   editable; finalization locks content. A variation starts a new private draft/UUID.
 - Sharing changes visibility without changing identity. Archiving preserves identity
@@ -28,7 +31,7 @@ observations. The real FlavorGirls server has not been connected.
 
 | Area | Implemented locally | Verified on managed staging | Validated with users |
 | --- | --- | --- | --- |
-| Foundation/accounts | PostgreSQL, locked dependencies, production settings, safe fetching, sessions/CSRF, private ownership | HTTPS/account/isolation smoke passed; SMTP pending | Pending |
+| Foundation/accounts | PostgreSQL, locked dependencies, production settings, safe fetching, Firebase Google sign-in/linking, sessions/CSRF, private ownership | Existing HTTPS/account/isolation smoke passed; Google provider activation pending | Pending |
 | Save-to-cook | Import/review, drafts/finalization, library/search, variations, notes/favorites, cooking | HTTPS manual import/finalize/cook and browser smoke passed | Pending |
 | Recipe lifecycle | Immutable content/UUIDs enforced by PostgreSQL; sharing and archiving; populated migration rehearsal | Managed migration and isolated restore/immutability verification passed | Pending |
 | Starter collection | 415 canonical recipes and aliases; 140 cloud-hosted images previously verified | 415 seeded; managed media references and v2 document delivery checked | Pending |
@@ -38,8 +41,8 @@ observations. The real FlavorGirls server has not been connected.
 | Visual capture | Durable fixture-only detection/review/approval; live detection absent | Disabled by design | Not evaluated |
 | Operations | CI workflow, Docker, Terraform and local restore rehearsal | Staging, cleanup, isolated restore and compatible rollback passed | Operator use pending |
 
-Latest application verification: 87 PostgreSQL tests and 16 desktop/mobile browser
-scenarios pass, with zero production warnings and green remote CI. Current release test counts
+The previous release passed 87 PostgreSQL tests and 16 browser scenarios with green CI.
+Firebase verification is recorded in [08-firebase-auth](execution/08-firebase-auth.md). Current release test counts
 and hosted evidence are recorded in [07-release-and-v2](execution/07-release-and-v2.md),
 not inferred from feature presence. GitHub had no workflow runs at the start of this increment.
 
@@ -47,12 +50,13 @@ not inferred from feature presence. GitHub had no workflow runs at the start of 
 
 The product owner approved items 1, 2 and 3 on September 7. This supersedes the earlier
 session-specific statements that no push, protected deployment or staging spending is authorized.
+The owner subsequently approved Firebase Google sign-in in place of SMTP/password recovery.
 Use the existing small staging footprint; live AI, billing and public launch are outside this increment.
 
 | Priority / owner | Deliverable | Exit criteria |
 | --- | --- | --- |
 | 1 / Engineering | Reconcile roadmap and setup documentation | One current status table; historical work clearly archived; immutable lifecycle reflected throughout current instructions |
-| 2 / Engineering + product owner for SMTP configuration | A3 protected managed staging | Green remote CI, digest-pinned release, real HTTPS/two-user smoke, private media, scheduled cleanup, managed restore and compatible rollback evidence; recovery email delivery tested once a sender is configured |
+| 2 / Engineering + product owner for Google provider activation | A3 protected managed staging | Green remote CI, digest-pinned release, real HTTPS/two-user smoke, private media, scheduled cleanup, managed restore and compatible rollback evidence; Firebase Google sign-in verified on the hosted app; provider owns account recovery |
 | 3 / Engineering | Focused FlavorGirls v2 contract | Grant-filtered phrase search, stable cursor pagination, UUID detail with validated RecipeDocumentV1, immutable ingredient/step IDs, no-content unavailable response, v1 compatibility and client smoke |
 
 V2 initially supports q, relevance/newest/quickest, limit/cursor and max_total_minutes.
@@ -60,7 +64,7 @@ Rating sorts, votes, tag taxonomy and generated recipes are excluded. App tokens
 version-specific audiences but the same app grants and shared usage limits. Existing
 v1 clients retain their endpoint and token contract.
 
-A3 may be partially complete: SMTP delivery, operator browser access and observations
+A3 may be partially complete: hosted Google sign-in, operator browser access and observations
 must be listed individually, rather than marking the entire milestone done after a deployment.
 Managed SQL backups do not back up GCS objects; record object verification separately.
 
@@ -96,6 +100,6 @@ and observed draft/variation confusion. Small pilots provide directional evidenc
 not precise market conversion estimates. Paid intent is not a current release gate.
 
 Hosting, isolation and recovery are now demonstrated on protected staging. User-observed
-usability and recovery email remain gates before pilot readiness.
+usability, hosted Google sign-in and pilot access remain gates before pilot readiness.
 No broader rollout until user observations have been reviewed. Maintain owner, status,
 blocking input, next action and dated evidence for each active item; update weekly.

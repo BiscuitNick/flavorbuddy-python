@@ -1,21 +1,24 @@
 from smtplib import SMTPException
+
 from django.conf import settings
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.middleware.csrf import get_token
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.decorators import method_decorator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.decorators.csrf import csrf_protect
-from rest_framework.views import APIView
+from rest_framework import serializers
+from rest_framework.exceptions import APIException, ValidationError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework import serializers
-from rest_framework.exceptions import ValidationError, APIException
+from rest_framework.views import APIView
+
+from scrape_me.firebase_auth import firebase_sign_in
 from scrape_me.services.budgets import auth_limit
 
 User = get_user_model()
@@ -46,17 +49,44 @@ class AccountView(APIView):
                 "csrf_token": get_token(request),
                 "recovery_available": settings.EMAIL_BACKEND
                 == "django.core.mail.backends.smtp.EmailBackend"
-                and bool(settings.EMAIL_HOST),
+                and bool(settings.EMAIL_HOST)
+                and settings.LOCAL_AUTH_ENABLED,
+                "local_auth_enabled": settings.LOCAL_AUTH_ENABLED,
+                "firebase": {
+                    "apiKey": settings.FIREBASE_API_KEY,
+                    "authDomain": settings.FIREBASE_AUTH_DOMAIN,
+                    "projectId": settings.FIREBASE_PROJECT_ID,
+                    "appId": settings.FIREBASE_APP_ID,
+                    **(
+                        {
+                            "emulatorUrl": "http://"
+                            + settings.FIREBASE_AUTH_EMULATOR_HOST
+                        }
+                        if settings.FIREBASE_AUTH_EMULATOR_HOST
+                        else {}
+                    ),
+                }
+                if settings.FIREBASE_ENABLED
+                else None,
             }
         )
 
     def post(self, request, action):
         if not isinstance(request.data, dict):
             raise ValidationError("Send a JSON object.")
-        auth_limit(request, str(request.data.get("email", ""))[:150])
+        auth_limit(
+            request,
+            str(request.data.get("email", request.data.get("id_token", "")))[:16384],
+        )
         if action == "logout":
             logout(request)
             return Response({"ok": True, "csrf_token": get_token(request)})
+        if action == "firebase":
+            return firebase_sign_in(request)
+        if not settings.LOCAL_AUTH_ENABLED:
+            raise ValidationError(
+                "Continue with Google to access your account. Google handles account recovery."
+            )
         if action == "reset":
             email = serializers.EmailField(max_length=150).run_validation(
                 request.data.get("email")
@@ -99,8 +129,11 @@ class AccountView(APIView):
                 User.DoesNotExist,
             ):
                 raise ValidationError("This reset link is invalid or expired.")
-            if not default_token_generator.check_token(
-                user, request.data.get("token", "")
+            if (
+                not default_token_generator.check_token(
+                    user, request.data.get("token", "")
+                )
+                or not user.has_usable_password()
             ):
                 raise ValidationError("This reset link is invalid or expired.")
             password = serializers.CharField(

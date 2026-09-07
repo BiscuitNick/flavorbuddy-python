@@ -23,11 +23,12 @@ is retained as historical cost/architecture context.
 - Hourly cleanup: Cloud Scheduler `flavorbuddy-staging-housekeeping` at :17 UTC,
   invoking the same-named Cloud Run job through a dedicated scheduler identity.
   It runs `expire_imports`, `cleanup_private_photos`, and `cleartokens`.
-- AI/capture remain disabled. SMTP recovery remains disabled until configured.
+- AI/capture remain disabled. Firebase Google sign-in replaces SMTP recovery; see
+  [Firebase activation](firebase-auth.md) for the remaining provider-console step.
 
 A project-filtered $30 monthly budget alert is configured at 50%, 90%, and 100%.
 It is a notification, not a spending cap. The original $15–30/month GCP estimate
-remains an estimate; sender service costs depend on the provider selected later.
+remains an estimate; review Firebase usage limits before expanding beyond the pilot.
 The temporary restore instance/job must be removed after the recorded drill.
 
 ## Operator access and secrets
@@ -104,8 +105,8 @@ Define an explicit media recovery/retention policy before promising recovery of 
 
 ## Remaining pilot inputs
 
-- Select SMTP provider/sender and provide credentials through Secret Manager. Then
-  test real delivery to an authorized operator, expiry, single use and generic errors.
+- Complete [Firebase Google provider activation](firebase-auth.md), then verify a
+  real protected-host sign-in. Google handles account recovery; SMTP is no longer a gate.
 - Choose pilot browser access (IAP or another reviewed protected login flow) and users.
 - Observe usability; browser automation is not evidence of user validation.
 - Establish a supported import source set from hosted results. One live Allrecipes

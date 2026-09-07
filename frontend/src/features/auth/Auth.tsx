@@ -4,13 +4,15 @@ import { api, sample } from "../../api";
 import type { User } from "../../api";
 import { ErrorBox } from "../../components/ErrorBox";
 import { FoodImage } from "../../components/RecipeContent";
-export function Welcome({
-  onAuth,
-  recovery,
-}: {
+import { GoogleSignIn } from "./GoogleSignIn";
+import type { FirebaseConfig } from "./firebase";
+type AuthProps = {
   onAuth: (u: User) => void;
   recovery: boolean;
-}) {
+  firebase?: FirebaseConfig | null;
+  localAuth?: boolean;
+};
+export function Welcome({ onAuth, recovery, firebase, localAuth }: AuthProps) {
   return (
     <section className="welcome">
       <div className="welcome-copy">
@@ -45,7 +47,12 @@ export function Welcome({
           </div>
         </div>
       </div>
-      <Auth onAuth={onAuth} recovery={recovery} />
+      <Auth
+        onAuth={onAuth}
+        recovery={recovery}
+        firebase={firebase}
+        localAuth={localAuth}
+      />
     </section>
   );
 }
@@ -53,10 +60,9 @@ export function Welcome({
 export function Auth({
   onAuth,
   recovery,
-}: {
-  onAuth: (u: User) => void;
-  recovery: boolean;
-}) {
+  firebase,
+  localAuth = true,
+}: AuthProps) {
   const [mode, setMode] = useState("login");
   const [error, setError] = useState<unknown>();
   const [busy, setBusy] = useState(false);
@@ -92,63 +98,73 @@ export function Auth({
         while you sign in.
       </p>
       <ErrorBox error={error} />
-      {sent ? (
-        <p role="status">If that account exists, a reset link is on its way.</p>
-      ) : (
-        <form onSubmit={submit}>
-          <label>
-            Email
-            <input
-              name="email"
-              type="email"
-              autoComplete="email"
-              maxLength={150}
-              required
-            />
-          </label>
-          {mode !== "reset" && (
-            <label>
-              Password
-              <input
-                name="password"
-                type="password"
-                autoComplete={
-                  mode === "register" ? "new-password" : "current-password"
-                }
-                maxLength={128}
-                minLength={mode === "register" ? 8 : 1}
-                required
-              />
-            </label>
-          )}
-          <button className="button primary full" disabled={busy}>
-            {busy
-              ? "One moment…"
-              : mode === "register"
-                ? "Create account"
-                : mode === "reset"
-                  ? "Send reset link"
-                  : "Sign in"}
-            <ArrowRight size={18} />
-          </button>
-        </form>
+      {firebase && <GoogleSignIn config={firebase} onAuth={onAuth} />}
+      {!firebase && !localAuth && (
+        <p>Sign-in is temporarily unavailable. Please try again later.</p>
       )}
-      <button
-        className="text-button"
-        onClick={() => {
-          setMode(mode === "register" ? "login" : "register");
-          setError(null);
-          setSent(false);
-        }}
-      >
-        {mode === "register"
-          ? "Already have an account? Sign in"
-          : "New here? Create an account"}
-      </button>
-      {recovery && (
-        <button className="text-button" onClick={() => setMode("reset")}>
-          Forgot your password?
-        </button>
+      {localAuth && (
+        <>
+          {sent ? (
+            <p role="status">
+              If that account exists, a reset link is on its way.
+            </p>
+          ) : (
+            <form onSubmit={submit}>
+              <label>
+                Email
+                <input
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  maxLength={150}
+                  required
+                />
+              </label>
+              {mode !== "reset" && (
+                <label>
+                  Password
+                  <input
+                    name="password"
+                    type="password"
+                    autoComplete={
+                      mode === "register" ? "new-password" : "current-password"
+                    }
+                    maxLength={128}
+                    minLength={mode === "register" ? 8 : 1}
+                    required
+                  />
+                </label>
+              )}
+              <button className="button primary full" disabled={busy}>
+                {busy
+                  ? "One moment…"
+                  : mode === "register"
+                    ? "Create account"
+                    : mode === "reset"
+                      ? "Send reset link"
+                      : "Sign in"}
+                <ArrowRight size={18} />
+              </button>
+            </form>
+          )}
+          <button
+            className="text-button"
+            onClick={() => {
+              setMode(mode === "register" ? "login" : "register");
+              setError(null);
+              setSent(false);
+            }}
+          >
+            {mode === "register"
+              ? "Already have an account? Sign in"
+              : "New here? Create an account"}
+          </button>
+          {recovery && (
+            <button className="text-button" onClick={() => setMode("reset")}>
+              Forgot your password?
+            </button>
+          )}
+        </>
       )}
     </section>
   );

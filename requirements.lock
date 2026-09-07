@@ -14,6 +14,8 @@ beautifulsoup4==4.15.0
     # via
     #   mf2py
     #   recipe-scrapers
+cachecontrol==0.14.4
+    # via firebase-admin
 certifi==2026.7.22
     # via
     #   httpcore
@@ -27,6 +29,7 @@ cryptography==50.0.1
     # via
     #   google-auth
     #   jwcrypto
+    #   pyjwt
 django==5.2.17
     # via
     #   -r requirements.txt
@@ -43,19 +46,30 @@ dnspython==2.8.0
     # via -r requirements.txt
 extruct==0.18.0
     # via recipe-scrapers
+firebase-admin==7.5.0
+    # via -r requirements.txt
 google-api-core==2.36.0
     # via
+    #   firebase-admin
     #   google-cloud-core
+    #   google-cloud-firestore
     #   google-cloud-storage
 google-auth==2.57.1
     # via
     #   google-api-core
     #   google-cloud-core
+    #   google-cloud-firestore
     #   google-cloud-storage
 google-cloud-core==2.7.0
-    # via google-cloud-storage
+    # via
+    #   google-cloud-firestore
+    #   google-cloud-storage
+google-cloud-firestore==2.30.0
+    # via firebase-admin
 google-cloud-storage==3.13.1
-    # via django-storages
+    # via
+    #   django-storages
+    #   firebase-admin
 google-crc32c==1.8.0
     # via
     #   google-cloud-storage
@@ -63,11 +77,24 @@ google-crc32c==1.8.0
 google-resumable-media==2.10.2
     # via google-cloud-storage
 googleapis-common-protos==1.75.3
+    # via
+    #   google-api-core
+    #   grpcio-status
+grpcio==1.83.1
+    # via
+    #   google-api-core
+    #   google-cloud-firestore
+    #   grpcio-status
+grpcio-status==1.83.1
     # via google-api-core
 gunicorn==23.0.0
     # via -r requirements.txt
 h11==0.16.0
     # via httpcore
+h2==4.4.1
+    # via httpx
+hpack==4.2.0
+    # via h2
 html-text==0.7.1
     # via extruct
 html5lib==1.1
@@ -77,7 +104,11 @@ html5lib==1.1
 httpcore==1.0.9
     # via httpx
 httpx==0.28.1
-    # via replicate
+    # via
+    #   firebase-admin
+    #   replicate
+hyperframe==6.1.0
+    # via h2
 idna==3.19
     # via
     #   anyio
@@ -108,6 +139,8 @@ mdurl==0.1.2
     # via markdown-it-py
 mf2py==2.0.1
     # via extruct
+msgpack==1.2.2
+    # via cachecontrol
 oauthlib==3.3.1
     # via django-oauth-toolkit
 opentelemetry-api==1.44.0
@@ -119,11 +152,15 @@ packaging==26.3
 pillow==12.3.0
     # via -r requirements.txt
 proto-plus==1.28.4
-    # via google-api-core
+    # via
+    #   google-api-core
+    #   google-cloud-firestore
 protobuf==7.36.1
     # via
     #   google-api-core
+    #   google-cloud-firestore
     #   googleapis-common-protos
+    #   grpcio-status
     #   proto-plus
 psycopg2-binary==2.9.12
     # via -r requirements.txt
@@ -137,6 +174,8 @@ pydantic==2.13.5
     # via replicate
 pydantic-core==2.46.5
     # via pydantic
+pyjwt==2.13.0
+    # via firebase-admin
 pyparsing==3.3.2
     # via rdflib
 pyrdfa3==3.6.5
@@ -157,6 +196,7 @@ replicate==1.0.7
     # via -r requirements.txt
 requests==2.34.2
     # via
+    #   cachecontrol
     #   django-oauth-toolkit
     #   google-api-core
     #   google-cloud-storage
@@ -176,6 +216,7 @@ typing-extensions==4.16.0
     # via
     #   anyio
     #   beautifulsoup4
+    #   grpcio
     #   jwcrypto
     #   opentelemetry-api
     #   pydantic

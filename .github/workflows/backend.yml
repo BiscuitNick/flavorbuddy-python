@@ -39,6 +39,9 @@ jobs:
       - run: npm run test:e2e --prefix frontend
         env:
           FLAVORBUDDY_PYTHON: python
+      - run: npm run test:firebase --prefix frontend
+        env:
+          FLAVORBUDDY_PYTHON: python
       - run: python manage.py check --deploy --fail-level WARNING
         env:
           DJANGO_ENV: production
@@ -46,6 +49,10 @@ jobs:
           DJANGO_SECRET_KEY: ci-only-validation-abcdefghijklmnopqrstuvwxyz-0123456789
           DJANGO_ALLOWED_HOSTS: alpha.example.com
           PROJECT_URL: https://alpha.example.com
+          FIREBASE_PROJECT_ID: demo-flavorbuddy
+          FIREBASE_API_KEY: ci-public-placeholder
+          FIREBASE_AUTH_DOMAIN: demo-flavorbuddy.firebaseapp.com
+          FIREBASE_APP_ID: ci-public-placeholder
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
