@@ -1,5 +1,10 @@
 # Deployment runbook (prepared; no public services provisioned)
 
+Current managed staging status and operator instructions are in
+[staging-release.md](staging-release.md). Dated implementation/storage notes below
+are historical; they do not override the current release evidence.
+
+
 Use the application Docker image with PostgreSQL 16 (Cloud SQL is compatible with
 the existing GCP direction). Keep staging and production databases, secrets, and
 SMTP credentials separate. Inject POSTGRES_* via the host secret manager.
@@ -110,11 +115,8 @@ This public bucket must not receive private user uploads.
 
 ## Current continuation status
 
-The historical storage notes above are superseded by
-[staging-release.md](staging-release.md): existing starter GCS is public and verified;
-ADC is still waiting for Google sign-in. A separate private photo implementation
-now exists locally. Never use the starter alias for user photos. The protected
-staging Terraform configuration includes a new private bucket with enforced public
-access prevention, but no new infrastructure has been provisioned. See
-[expansion execution](../execution/05-expansion.md) for cleanup/worker commands and
-exact release limitations.
+Protected managed staging was authorized and provisioned September 7. Follow
+[staging operations](staging-release.md) and [release evidence](../execution/07-release-and-v2.md).
+Local ADC remains optional pending sign-in; the host uses its attached runtime identity.
+Private photos use the separate protected bucket. The fixture capture worker is not a
+production inference service; live capture and paid AI remain disabled.

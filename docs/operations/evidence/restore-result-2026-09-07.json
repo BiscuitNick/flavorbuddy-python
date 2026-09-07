@@ -1,0 +1,15 @@
+[
+  {
+    "jsonPayload": {
+      "catalog_grant": true,
+      "immutable_trigger": true,
+      "managed_restore": "passed",
+      "pantry_isolation": true,
+      "private_gcs_object_hash_decode_and_ownership": true,
+      "recipe_count": 417,
+      "starters": 415,
+      "two_user_exports": true
+    },
+    "timestamp": "2026-09-07T06:04:47.938486Z"
+  }
+]

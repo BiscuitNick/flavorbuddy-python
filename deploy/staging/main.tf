@@ -148,6 +148,10 @@ resource "google_cloud_run_v2_service" "staging" {
   location             = "us-central1"
   deletion_protection  = true
   invoker_iam_disabled = false
+  traffic {
+    type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
+    percent = 100
+  }
   template {
     service_account                  = google_service_account.runtime.email
     max_instance_request_concurrency = 8

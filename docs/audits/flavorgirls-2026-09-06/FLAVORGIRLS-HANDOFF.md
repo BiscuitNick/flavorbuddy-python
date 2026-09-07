@@ -14,7 +14,9 @@ remain proposals. Schema validation does not infer ingredient quantities or cook
 
 Obtain catalog:read tokens at `/api/integrations/v1/oauth/token` with the exact v2
 resource audience (`<PROJECT_URL>/api/integrations/v2/`). V1 tokens stay v1-only;
-registered applications share the same grants and quotas across versions.
+registered applications share the same grants and quotas across versions. Protected
+staging also requires Google IAM invocation authentication in `X-Serverless-Authorization`;
+keep the app OAuth token in `Authorization`.
 Search and detail only expose explicit licensed-starter catalog membership.
 The real FlavorGirls server has not been configured or contacted by this implementation.
 

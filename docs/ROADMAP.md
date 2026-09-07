@@ -5,6 +5,10 @@ This is the authoritative current backlog. [Historical September 6 planning](his
 is retained for context; its dates, estimates, status tables and ordering are superseded.
 Implementation evidence lives in [execution](execution/README.md).
 
+**Current outcome:** items 1 and 3 are implemented; protected staging, managed restore
+and rollback are verified. A3 remains partially open for SMTP delivery and pilot access/
+observations. The real FlavorGirls server has not been connected.
+
 ## Product decisions
 
 - Django/PostgreSQL owns recipe data; React provides the mobile web experience.
@@ -17,25 +21,25 @@ Implementation evidence lives in [execution](execution/README.md).
 - Preserve ingredient/step source text and unknowns. Structured IDs do not establish
   quantities, ingredient references, dietary suitability or culinary correctness.
 - The 415 licensed starters are the accepted collection size; no 500-recipe target remains.
-- Consumer and owned-app experiences share search semantics; app catalog grants,
+- Public catalog and owned-app experiences share search semantics; app catalog grants,
   authentication, visibility and budgets are enforced independently on the server.
 
 ## Current status
 
 | Area | Implemented locally | Verified on managed staging | Validated with users |
 | --- | --- | --- | --- |
-| Foundation/accounts | PostgreSQL, locked dependencies, production settings, safe fetching, sessions/CSRF, private ownership | Release work in progress; see release evidence | Pending |
-| Save-to-cook | Import/review, drafts/finalization, library/search, variations, notes/favorites, cooking | Release work in progress | Pending |
-| Recipe lifecycle | Immutable content/UUIDs enforced by PostgreSQL; sharing and archiving; populated migration rehearsal | Latest migration must be exercised during release/restore | Pending |
-| Starter collection | 415 canonical recipes and aliases; 140 cloud-hosted images previously verified | Application delivery to be checked during release | Pending |
-| Pantry/photos | Manual inventory, preferences, conservative matching, private cover/result photos, durable cleanup | Private GCS lifecycle/authorization checks in progress | Pending |
-| Catalog v1 | Read-only OAuth, explicit catalog grants, quotas, revocation, audit | Pending release smoke | Other app not connected |
-| Catalog v2 | Search, UUID document detail, deterministic ingredient/step IDs, unavailable responses under implementation/verification | Pending release smoke | FlavorGirls end-to-end pending |
+| Foundation/accounts | PostgreSQL, locked dependencies, production settings, safe fetching, sessions/CSRF, private ownership | HTTPS/account/isolation smoke passed; SMTP pending | Pending |
+| Save-to-cook | Import/review, drafts/finalization, library/search, variations, notes/favorites, cooking | HTTPS manual import/finalize/cook and browser smoke passed | Pending |
+| Recipe lifecycle | Immutable content/UUIDs enforced by PostgreSQL; sharing and archiving; populated migration rehearsal | Managed migration and isolated restore/immutability verification passed | Pending |
+| Starter collection | 415 canonical recipes and aliases; 140 cloud-hosted images previously verified | 415 seeded; managed media references and v2 document delivery checked | Pending |
+| Pantry/photos | Manual inventory, preferences, conservative matching, private cover/result photos, durable cleanup | Private photo upload/hash/decode/isolation and scheduled cleanup passed | Pending |
+| Catalog v1 | Read-only OAuth, explicit catalog grants, quotas, revocation, audit | Protected release deployed; existing v1 retained | Other app not connected |
+| Catalog v2 | Search, UUID document detail, deterministic ingredient/step IDs, unavailable responses implemented and tested | Hosted client search/detail/revocation smoke passed | FlavorGirls end-to-end pending |
 | Visual capture | Durable fixture-only detection/review/approval; live detection absent | Disabled by design | Not evaluated |
-| Operations | CI workflow, Docker, Terraform and local restore rehearsal | Managed staging/restore/rollback in progress | Operator use pending |
+| Operations | CI workflow, Docker, Terraform and local restore rehearsal | Staging, cleanup, isolated restore and compatible rollback passed | Operator use pending |
 
-Baseline verification on September 7: 78 PostgreSQL tests passed. The prior lifecycle
-increment documented 16 desktop/mobile browser scenarios. Current release test counts
+Latest application verification: 87 PostgreSQL tests and 16 desktop/mobile browser
+scenarios pass, with zero production warnings and green remote CI. Current release test counts
 and hosted evidence are recorded in [07-release-and-v2](execution/07-release-and-v2.md),
 not inferred from feature presence. GitHub had no workflow runs at the start of this increment.
 
@@ -91,6 +95,7 @@ Track import reliability on an agreed source set, first-week activation, return 
 and observed draft/variation confusion. Small pilots provide directional evidence,
 not precise market conversion estimates. Paid intent is not a current release gate.
 
-No launch claim until actual hosting, isolation, recovery and core usability are demonstrated.
+Hosting, isolation and recovery are now demonstrated on protected staging. User-observed
+usability and recovery email remain gates before pilot readiness.
 No broader rollout until user observations have been reviewed. Maintain owner, status,
 blocking input, next action and dated evidence for each active item; update weekly.

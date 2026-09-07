@@ -191,7 +191,9 @@ quantities, timers, equipment and references null. It does not infer cooking fac
 
 Obtain tokens at the existing `/api/integrations/v1/oauth/token`, requesting `catalog:read`
 and resource `<PROJECT_URL>/api/integrations/v2/`. Tokens are restricted to the requested
-version; v1 and v2 share grants, revocation and quotas. Only explicit starter catalog
+version; v1 and v2 share grants, revocation and quotas. Protected staging additionally
+requires Google IAM invocation credentials in `X-Serverless-Authorization`; see
+[operator access](docs/operations/staging-release.md). Only explicit starter catalog
 membership is eligible; public sharing never automatically grants an app access.
 
 Private/archived granted identities return 410 with a null document; unknown/ungranted
