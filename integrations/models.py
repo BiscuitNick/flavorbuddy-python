@@ -27,6 +27,7 @@ class AppAudit(models.Model):
     )
     action = models.CharField(max_length=30)
     resource_id = models.PositiveBigIntegerField(null=True)
+    recipe_uuid = models.UUIDField(null=True)
     status = models.PositiveSmallIntegerField()
     request_id = models.UUIDField()
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)

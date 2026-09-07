@@ -36,9 +36,12 @@ class StarterView(APIView):
                 raise ValueError
         except ValueError:
             raise ValidationError("Use a positive page number.")
-        recipes = available_starters().filter(
-            recipe__title__icontains=request.query_params.get("q", "")[:255]
+        from scrape_me.services.search import search_recipes
+
+        matches = search_recipes(
+            Recipe.objects.all(), request.query_params.get("q", "")[:200].strip()
         )
+        recipes = available_starters().filter(recipe__in=matches)
         count = recipes.count()
         return Response(
             {

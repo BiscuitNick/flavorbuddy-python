@@ -7,7 +7,7 @@ class AuditMiddleware:
 
     def __call__(self, request):
         response = self.get_response(request)
-        if request.path.startswith("/api/integrations/v1/"):
+        if request.path.startswith(("/api/integrations/v1/", "/api/integrations/v2/")):
             match = request.resolver_match
             # Never store request bodies, query strings, credentials or raw URLs.
             AppAudit.objects.create(
@@ -20,6 +20,7 @@ class AuditMiddleware:
                     else "catalog"
                 ),
                 resource_id=match.kwargs.get("pk") if match else None,
+                recipe_uuid=match.kwargs.get("public_id") if match else None,
                 status=response.status_code,
                 request_id=request.request_id,
             )

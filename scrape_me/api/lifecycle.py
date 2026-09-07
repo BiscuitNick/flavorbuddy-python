@@ -116,11 +116,11 @@ class SharedView(APIView):
                 raise ValueError
         except ValueError:
             raise ValidationError("Use a positive page number.")
-        recipes = (
-            public_recipes()
-            .filter(title__icontains=request.query_params.get("q", "")[:255])
-            .order_by("title", "id")
-        )
+        from scrape_me.services.search import search_recipes
+
+        recipes = search_recipes(
+            public_recipes(), request.query_params.get("q", "")[:200].strip()
+        ).order_by("-search_rank", "title", "id")
         count = recipes.count()
         return Response(
             {

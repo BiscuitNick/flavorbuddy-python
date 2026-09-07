@@ -29,9 +29,18 @@ variable "invokers" {
     error_message = "Use explicit users, groups or service accounts; public principals are forbidden."
   }
 }
-variable "smtp_host" { type = string }
-variable "smtp_user" { type = string }
-variable "from_email" { type = string }
+variable "smtp_host" {
+  type    = string
+  default = ""
+}
+variable "smtp_user" {
+  type    = string
+  default = ""
+}
+variable "from_email" {
+  type    = string
+  default = "noreply@localhost"
+}
 # Secret versions and SQL login are populated out of band, so Terraform state
 # never contains application, database or SMTP passwords.
 variable "secret_versions" {
@@ -39,7 +48,7 @@ variable "secret_versions" {
   description = "Numeric versions for fb-staging-django-key, fb-staging-db-password and fb-staging-smtp-password"
 }
 resource "google_project_service" "apis" {
-  for_each           = toset(["run.googleapis.com", "sqladmin.googleapis.com", "secretmanager.googleapis.com", "artifactregistry.googleapis.com"])
+  for_each           = toset(["run.googleapis.com", "sqladmin.googleapis.com", "secretmanager.googleapis.com", "artifactregistry.googleapis.com", "cloudscheduler.googleapis.com"])
   service            = each.value
   disable_on_destroy = false
 }
@@ -121,16 +130,15 @@ locals {
     PRIVATE_PHOTO_BACKEND  = "gcs"
     GS_PRIVATE_BUCKET_NAME = google_storage_bucket.private_photos.name
     AI_ENABLED             = "false"
-    EMAIL_BACKEND          = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_BACKEND          = var.smtp_host != "" ? "django.core.mail.backends.smtp.EmailBackend" : "django.core.mail.backends.locmem.EmailBackend"
     EMAIL_HOST             = var.smtp_host
     EMAIL_HOST_USER        = var.smtp_user
     DEFAULT_FROM_EMAIL     = var.from_email
   }
-  secrets = {
-    DJANGO_SECRET_KEY   = "fb-staging-django-key"
-    POSTGRES_PASSWORD   = "fb-staging-db-password"
-    EMAIL_HOST_PASSWORD = "fb-staging-smtp-password"
-  }
+  secrets = merge({
+    DJANGO_SECRET_KEY = "fb-staging-django-key"
+    POSTGRES_PASSWORD = "fb-staging-db-password"
+  }, var.smtp_host != "" ? { EMAIL_HOST_PASSWORD = "fb-staging-smtp-password" } : {})
 }
 resource "google_cloud_run_v2_service" "staging" {
   name                 = "flavorbuddy-staging"

@@ -1,651 +1,96 @@
-# FlavorBuddy product and engineering roadmap
+# FlavorBuddy roadmap
 
-**Planning date:** September 6, 2026  
-**Status:** Broader roadmap; first private alpha implemented locally (see execution evidence)  
-**Baseline:** Review of the current `flavorbuddy-python` working tree, including existing uncommitted changes  
-**Product promise:** Turn the recipes you save into dinners you actually cook.
+Updated September 7, 2026. **Product promise: turn saved recipes into dinners people cook.**
+This is the authoritative current backlog. [Historical September 6 planning](history/roadmap-2026-09-06.md)
+is retained for context; its dates, estimates, status tables and ordering are superseded.
+Implementation evidence lives in [execution](execution/README.md).
 
-This document combines the existing-capability audit, product direction, implementation sequence, production requirements, and business experiments. Recommendations, schedules, pricing, and numerical success thresholds are planning hypotheses unless explicitly identified as verified observations. They are not commitments or evidence of customer demand.
+## Product decisions
 
-**Start implementation with the [highest-impact execution plans](execution/README.md).** Those plans define the first private alpha, concrete change sets, file-level work, dependencies, and acceptance criteria. They intentionally defer parts of the broader roadmap until the import-to-cooking experience is validated.
+- Django/PostgreSQL owns recipe data; React provides the mobile web experience.
+- One recipe UUID identifies one finalized, immutable recipe. Drafts are private and
+  editable; finalization locks content. A variation starts a new private draft/UUID.
+- Sharing changes visibility without changing identity. Archiving preserves identity
+  and returns unavailable responses. Notes, favorites and private photos stay personal.
+- Recipe reputation will come from user feedback, not an editorial approval queue.
+  Feedback, reports and ranking are still separate future work.
+- Preserve ingredient/step source text and unknowns. Structured IDs do not establish
+  quantities, ingredient references, dietary suitability or culinary correctness.
+- The 415 licensed starters are the accepted collection size; no 500-recipe target remains.
+- Consumer and owned-app experiences share search semantics; app catalog grants,
+  authentication, visibility and budgets are enforced independently on the server.
 
-## Current priorities and expansion decisions — September 6, 2026
+## Current status
 
-This section supersedes the older sequential M0–M5 ordering and immediate-action
-list where they conflict. The historical audit and estimates below remain useful
-context, not the current backlog. User requested exploration and roadmap updates;
-new features and the packaging below are proposed, not implemented or priced.
+| Area | Implemented locally | Verified on managed staging | Validated with users |
+| --- | --- | --- | --- |
+| Foundation/accounts | PostgreSQL, locked dependencies, production settings, safe fetching, sessions/CSRF, private ownership | Release work in progress; see release evidence | Pending |
+| Save-to-cook | Import/review, drafts/finalization, library/search, variations, notes/favorites, cooking | Release work in progress | Pending |
+| Recipe lifecycle | Immutable content/UUIDs enforced by PostgreSQL; sharing and archiving; populated migration rehearsal | Latest migration must be exercised during release/restore | Pending |
+| Starter collection | 415 canonical recipes and aliases; 140 cloud-hosted images previously verified | Application delivery to be checked during release | Pending |
+| Pantry/photos | Manual inventory, preferences, conservative matching, private cover/result photos, durable cleanup | Private GCS lifecycle/authorization checks in progress | Pending |
+| Catalog v1 | Read-only OAuth, explicit catalog grants, quotas, revocation, audit | Pending release smoke | Other app not connected |
+| Catalog v2 | Search, UUID document detail, deterministic ingredient/step IDs, unavailable responses under implementation/verification | Pending release smoke | FlavorGirls end-to-end pending |
+| Visual capture | Durable fixture-only detection/review/approval; live detection absent | Disabled by design | Not evaluated |
+| Operations | CI workflow, Docker, Terraform and local restore rehearsal | Managed staging/restore/rollback in progress | Operator use pending |
 
-### September 6 implementation continuation
+Baseline verification on September 7: 78 PostgreSQL tests passed. The prior lifecycle
+increment documented 16 desktop/mobile browser scenarios. Current release test counts
+and hosted evidence are recorded in [07-release-and-v2](execution/07-release-and-v2.md),
+not inferred from feature presence. GitHub had no workflow runs at the start of this increment.
 
-The E1–E5 proposed-only statements below are historical. See
-[expansion implementation](execution/05-expansion.md): local controlled catalog
-OAuth, private photos, manual pantry/matching/preferences and durable fixture-only
-capture approval are implemented. A3 managed staging remains unverified; no live
-visual AI, billing or public deployment is claimed. Current release preparation
-and estimated additional costs are in [staging proposal](operations/staging-release.md).
+## Authorized work now
 
-### Verified current state
+The product owner approved items 1, 2 and 3 on September 7. This supersedes the earlier
+session-specific statements that no push, protected deployment or staging spending is authorized.
+Use the existing small staging footprint; live AI, billing and public launch are outside this increment.
 
-- Private Django/PostgreSQL + React import → review → save → find → edit → cook
-  alpha implemented locally. Latest backend suite: 49 passing PostgreSQL tests;
-  latest frontend evidence: 10 desktop/mobile browser scenarios (before storage).
-- Public starter catalog: 415 recipes; 140 valid images now in Google Cloud
-  Storage. All 140 cloud objects passed anonymous download, SHA256 and WebP decode
-  checks. Project `flavorbuddy-20260906`, bucket
-  `flavorbuddy-20260906-starter-images`, Biscuit Land billing linked with approval.
-- Application Default Credentials sign-in remains pending for future Django
-  uploads; initial migration used authenticated gcloud CLI. Public starter media
-  storage is not an implementation of private user uploads.
-- A3 managed staging/restore/rollback, remote CI execution, transactional email
-  configuration and observed pilot usability remain outstanding. Local production
-  checks and a local restore rehearsal passed; no hosted app release is claimed.
-- Pantry, user uploads, visual ingredient capture, paid plans, external-app
-  credentials, public user sharing/voting and recipe/image generation are absent.
-
-### Proposed free and paid packaging
-
-Keep the complete manual save-to-cook workflow useful for free. Charge for costly
-AI assistance, higher media allowances and advanced convenience. These are product
-hypotheses; exact quotas, prices and trials require cost and usage evidence.
-
-| Capability | Free proposal | Paid proposal / limits |
+| Priority / owner | Deliverable | Exit criteria |
 | --- | --- | --- |
-| Private recipes | Import, review, CRUD, search, cook, favorites, notes and export | Advanced organization may follow; retain access to existing recipes after downgrade |
-| Pantry/fridge/freezer | Manual inventory, optional amounts, locations, use-soon flags | Household coordination later |
-| Ingredient matching | Explainable matches against library/starters, missing ingredients | Advanced personalized rotation and multi-meal optimization |
-| Preferences | Dietary exclusions, dislikes, time/equipment filters | Learned ranking and advanced recommendations; exclusions never paywalled |
-| Photos | Modest storage allowance for covers and cooking results | Higher storage allowance; limits based on bytes as well as counts |
-| Photo-to-pantry | Optional small trial if economics permit | Metered scans with editable approval before saving |
-| AI recipes | Optional bounded trial | Metered generation of labeled, editable, private drafts |
-| AI images | Attractive missing-image fallback | Optional metered, labeled illustration generation |
-| Public community | Browse, explicitly share authorized content, vote/review | Avoid paid ranking boosts; possible creator tools later |
-| Groceries/planning | Basic missing-item list | Advanced weekly planning/household coordination, subject to validation |
-| Other owned apps | Individually approved application access | Separate app quotas/budgets; not automatically tied to consumer subscription |
-
-Entitlements must be server-side capabilities, not frontend-only flags. Evaluate
-app permission, user/resource permission, entitlement and remaining quota on every
-applicable request. Reserve AI usage atomically before dispatch; retries cannot
-bill twice. Downgrades block new over-limit operations while keeping reading,
-export, deletion and cancellation available. Define grace periods and retention
-before billing launch; do not silently delete stored photos. No unlimited AI offer.
-
-### Product expansion and dependency order
-
-| Order / change set | Scope | Dependencies and completion evidence |
-| --- | --- | --- |
-| 1 — A3 | Protected managed staging, real backup/restore and rollback, remote CI, email recovery, finish storage credentials | Two-user import/cook smoke on staging; actual managed restore; release evidence. No outreach without authorization |
-| 2 — E1 | Controlled read-only recipe API for the other owned app | App registration, revocation, quotas, explicit catalog grants and cross-app denial tests; begin with licensed starters only |
-| 3 — E2 | Private cover/result photo uploads and cooking feedback | Separate private storage, image validation/re-encoding, ownership/lifecycle controls, upload size/storage limits; users explicitly choose sharing |
-| 4 — E3 | Manual pantry and basic ingredient matching/preferences | Preserve ingredient source strings; normalize names/units with review; explain matches and missing ingredients; enforce exclusions |
-| 5 — E4 | Entitlement/usage foundation and durable jobs | Crash recovery, idempotent quota settlement, per-app/user/global budgets and failure tests before paid AI capture |
-| 6 — E5 | Photo-to-pantry | E2–E4; detected items/crops → edit/deduplicate → approve → atomic save; no automatic inventory mutation |
-| 7 — E6 | Paid plan lifecycle, richer personalization and planning/groceries | E4 plus real cost/value evidence; checkout/webhook replay/downgrade tests; ingredient correctness for shopping |
-| 8 — E7 | Optional AI recipe and illustration generation | E4/E6; labeled provenance, editable review, bounded trials/budgets; no claim generated recipes are kitchen-tested |
-| 9 — E8 | Explicit public recipe sharing, cooking reviews and voting | Publication snapshots, authorized content, moderation/reporting/deletion, abuse controls and sufficient community activity |
-
-E1 is pulled forward because an actual second-app use case now exists. E2 and E3
-can proceed independently after their shared foundations. Do not wait for all
-billing screens to build manual pantry or free photo functionality. Earlier M3/M4
-planning-first assumptions are superseded by this pantry-first sequence.
-
-Pantry means pantry, fridge, freezer and user-defined locations. Quantity and
-expiry dates are optional; support running-low, used-up and undo without forcing
-precise inventory. Photos cannot reliably expose hidden items or determine
-freshness: leave uncertain identity, quantities and dates for user confirmation.
-Keep capture images private; provide a discard/retention choice. Never infer an
-allergen-free guarantee from an image or incomplete ingredient record.
-
-Distinguish recipe cover assets, cooking-result photos and generated illustrations.
-Record media origin, owner and visibility. Cooking results link to a recipe/version
-and cooking event; cover edits must not overwrite that history. Public sharing
-publishes an explicit version and never makes all future private edits public.
-Start community feedback with “would make again” and helpful result notes; if
-upvotes are added, one active vote per user/recipe, change/remove, rate limits,
-reporting and ranking that does not let a single vote dominate discovery.
-
-Additional candidates: use-soon queue; missing ingredients to groceries; editable
-post-cooking inventory confirmation; personal recipe variations; household pantry
-later. Do not silently deduct quantities on cooking completion.
-
-### Controlled access for other owned apps
-
-Yes: keep Django/PostgreSQL as the authoritative recipe service, with a separate,
-versioned integration surface and app registry. Do not share database credentials,
-admin credentials, user session cookies, or bucket write credentials with clients.
-The current same-origin session API is not yet a secured multi-app integration.
-
-**First integration:** the other app's server reads approved starter/catalog
-content using OAuth 2.0 client credentials via a maintained implementation,
-short-lived audience-restricted tokens and a `catalog:read` scope. Register every
-app explicitly with environment-specific identity, approved collections, quotas,
-audit metadata, expiry/rotation and a kill switch checked on each request. Issue
-no anonymous client-registration flow. Keep secrets on the app's server, never
-in a browser/mobile bundle. Server-to-server calls do not need CORS.
-
-**Later delegated access:** if the other app needs a user's private library, use
-authorization code with PKCE and explicit user consent through a maintained OAuth
-implementation. Bind access to app, user, scopes and resource ownership; app-only
-credentials cannot impersonate arbitrary users. Decide explicitly whether identity
-is shared across products or linked by consent. Equal email addresses are not a
-cross-app authorization grant. Retain Django sessions/CSRF for FlavorBuddy's own
-same-origin UI; CORS allowlists do not replace authentication or authorization.
-
-Suggested scopes: `catalog:read`, `recipes:read`, `recipes:write`, `imports:create`,
-`pantry:read`, `pantry:write`. Default deny writes, private data, uploads and paid
-AI. Add each separately only when needed. App grants may select approved catalogs;
-private recipes remain owner-scoped and legacy unowned rows remain staff-only.
-Consumer and app quotas are independent, and neither bypasses global AI budgets.
-
-Publish an OpenAPI contract with pagination, errors, request IDs, idempotency,
-version/deprecation rules and source/license metadata. Audit app/resource/actions
-without secrets or raw private content. Test unknown/disabled apps, expired/wrong-
-audience tokens, missing scopes, cross-app and cross-user access, key rotation,
-revocation, quota races, attempted private export and paid-AI bypass. Start with
-one client app and one read-only endpoint family, not a general developer platform.
-
-**Control boundary:** we control future API access, permissions, budgets and
-catalog publication. We cannot recall data already downloaded. Existing public
-starter APIs and public GCS URLs remain public, so issuing client credentials
-cannot make that same content exclusive. If a controlled commercial catalog is
-needed later, it needs a separate gated content/media path and appropriate content
-rights. Attribution stays attached to exported recipes.
-
-Security references: [OAuth security best current practice (RFC 9700)](https://www.rfc-editor.org/info/rfc9700/),
-[DRF authentication](https://www.django-rest-framework.org/api-guide/authentication/),
-[DRF CSRF/CORS boundaries](https://www.django-rest-framework.org/topics/ajax-csrf-cors/).
-
-## 1. Direction and desired outcome
-
-Keep Django and PostgreSQL as the backend foundation. Build a polished, mobile-first web experience around a complete household workflow:
-
-**Save a recipe → choose dinners → prepare groceries → cook → remember what worked.**
-
-The first release should make this workflow reliable and enjoyable. Its value should come from reducing the effort of deciding and preparing meals, with AI used selectively for extraction and suggestions.
-
-### Initial audience
-
-- Busy individuals and couples who cook several times a week.
-- People with recipes scattered across websites, notes, screenshots, and bookmarks.
-- Households that repeat a few favorites but want an easier way to introduce variety.
-
-The audience is a hypothesis to validate through interviews and observed use. Avoid trying to serve professional kitchens, clinical nutrition programs, food publishers, and all home cooks in the same first release.
-
-### Problems to solve
-
-| Problem | Product response | Evidence to collect |
-| --- | --- | --- |
-| Saved recipes disappear into bookmarks. | Fast import and an organized private recipe box. | Successful imports, return visits, recipes reopened. |
-| Choosing dinner takes too much effort. | A short set of relevant choices and a flexible weekly plan. | Time to select a meal, suggestions accepted, meals planned. |
-| Turning recipes into groceries is repetitive. | Consolidated quantities and an easy already-have review. | Lists generated, corrections required, shopping completion. |
-| Recipe pages are awkward while cooking. | Clear cook mode, ingredients alongside steps, timers, offline access. | Cooking sessions completed, usability observations. |
-| Personal improvements get forgotten. | Private notes, modifications, and cooking history. | Notes saved, repeat cooks, make-again feedback. |
-
-### Differentiation hypothesis
-
-Established products already offer importing, planning, and grocery lists. FlavorBuddy should compete on the quality of the complete experience: extremely easy capture, useful suggestions from the user's own library, dependable shopping lists, and a pleasant cooking interface. Validate this against actual alternatives used by interview participants.
-
-### First-release exclusions
-
-Do not include a public social feed, unrestricted AI recipe generation, comprehensive nutrition tracking, automated video ingestion, exact store-price optimization, or native iOS/Android apps in the initial scope. These can become separate investments if observed demand supports them.
-
-## Implementation update — September 6, 2026
-
-The audit below is the historical pre-implementation baseline. A1–D2 now have a
-working local implementation with 42 PostgreSQL tests and 8 desktop/mobile browser
-scenarios. See [execution status](execution/README.md) for exact evidence and remaining
-release gates. Managed staging, paid AI evaluation and pilot feedback are not done.
-The baseline setup/routes later in this roadmap are superseded by the root README.
-
-## 2. Verified baseline
-
-### Existing capabilities
-
-| Area | Implemented behavior | Limitations |
-| --- | --- | --- |
-| URL import | `GET /parse-recipe-url?url=…` extracts a recipe and persists it. | Depends on website accessibility and scraper support; synchronous; writes through GET. |
-| Storage | PostgreSQL-backed `Recipe` model and five application migrations. | No consumer ownership or household boundaries. |
-| Stored fields | Source URL, description, title, author, total time, yield, image URL, ingredients, instructions, views, type, creation/update timestamps. | Ingredients and instructions are JSON; yield is free text. |
-| Deduplication | Unique source URL; reuse on repeat import. | Normalization only trims whitespace and trailing slashes; concurrent creation can race. |
-| Cache behavior | Existing records are returned without fetching the source again. | No freshness policy or explicit refresh workflow. |
-| Views | Import calls increment the stored view counter. | Not unique visitors or cooking activity; reads also change `updated_at`. |
-| Recipe listing | `GET /get-recipes` lists newest first. | Globally visible records; no private library. |
-| Search | Case-insensitive title matching through `q`. | No ingredient search or preference filters. |
-| Pagination | `page` and `page_size`; maximum page size 100. | Offset pagination only. |
-| AI extraction | `POST /convert-raw-recipe` structures raw text or HTML through Replicate. | Returns JSON without saving; no automatic URL fallback; no schema enforcement beyond an object. |
-| Web interface | Responsive import form and recipe display, source link, loading/errors, URL query restoration. | No library, customer accounts, planning, or shopping UI. |
-| Admin | Django admin recipe management, search, and date filtering. | Staff tooling rather than a customer experience. |
-| Development | Compose for PostgreSQL, `.env.example`, migrations, example scrapes, 17 tests. | No production application container or CI workflow. |
-
-`image_upload` and `ai_generated` are recipe-type values, not implemented product workflows. Django authentication is installed, but customer registration and private-library APIs do not exist. There is no consumer detail-by-ID, edit, delete, collections, pantry, payments, or background-job implementation.
-
-### Review verification
-
-- Fresh Python 3.13 dependency installation succeeded.
-- All 17 existing tests passed; they cover normalization and mocked AI endpoint behavior rather than database-backed import workflows.
-- A live Allrecipes import succeeded. Repeat import returned the same record and incremented views; search and homepage rendering succeeded using a temporary in-memory SQLite database.
-- Migration-state comparison reported no model changes requiring a migration.
-- PostgreSQL was not exercised: Docker was not running and local database connection attempts failed.
-- The paid AI integration was not called live.
-- Django's deployment check reported seven security warnings.
-- Valid non-object JSON bodies such as `[]`, `null`, and `42` produced uncaught attribute errors in the conversion view.
-- The resolved scraper package exposed a working `scrape_me` function. An initial concern based on older release notes was disproved by direct inspection and execution; there is no confirmed current startup blocker from that import.
-
-Before implementation, rerun verification against the selected locked dependencies and production database engine. Preserve the working tree's existing changes.
-
-### Repository reference points
-
-- API behavior: `scrape_me/views.py` and `scrape_me/urls.py`.
-- Data model: `scrape_me/models.py` and `scrape_me/migrations/`.
-- Production configuration gaps: `config/settings.py`.
-- Current interface: `scrape_me/templates/scrape_me/home.html`.
-- AI extraction instructions: `scrape_me/prompts/raw-text-system-prompt.md`.
-- Setup: `README.md`, `requirements.txt`, `.env.example`, and `docker-compose.yml`.
-- `.github/copilot-instructions.md` contains stale SQLite/no-external-service descriptions; update it when implementation begins.
-
-## 3. Product scope and user experience
-
-### Navigation and screens
-
-| Screen | Core interactions | Release |
-| --- | --- | --- |
-| Import | Paste URL/text, see progress, review extracted content, correct fields, save. | Private alpha |
-| Recipe box | Search, collections, favorites, grid/list switch, open/edit/delete. | Private alpha |
-| Recipe detail | Ingredients, directions, source, servings, personal notes, cook and plan actions. | Private alpha |
-| Cook mode | Readable steps, checkoffs, timers, saved progress, screen-awake support where available. | Private alpha |
-| Week | Add meals, move/swap meals, set servings, add leftovers or free-text meals. | Beta |
-| Groceries | Review ingredients, combine compatible quantities, group by aisle, check off, undo. | Beta |
-| Tonight | A small set of explainable choices from the user's library. | After basic planning is validated |
-| Household | Invitations, membership, shared plan/list, explicit sharing controls. | Paid beta |
-| Account | Preferences, subscription, export, account deletion. | Account basics in alpha; billing in paid beta |
-
-### Import onboarding
-
-1. Let a visitor preview a URL/text import within strict anonymous limits.
-2. Show an editable recipe with clearly identified missing information.
-3. Ask the visitor to create an account when saving or syncing.
-4. Preserve the draft through authentication and recover from failed requests.
-5. Offer a relevant next action: cook, add to the week, or save another recipe.
-
-Anonymous previews must not create globally visible recipe records or provide unlimited paid AI access. If safe anonymous import is too expensive for alpha, provide a local sample preview and require authentication for external fetching.
-
-### Visual design
-
-- Warm ivory backgrounds, dark olive text, and a restrained tomato accent.
-- Editorial headings with highly readable interface and recipe text.
-- Authentic food photography, consistent image ratios, and attractive missing-image states.
-- Generous space for discovery; compact, practical rows for groceries and larger libraries.
-- Clear primary actions and reachable mobile controls.
-- Motion should communicate progress or state changes and respect reduced-motion preferences.
-
-Define reusable typography, spacing, color, focus, form, button, card, dialog, and empty-state tokens before building all screens. Validate the palette for contrast rather than treating the proposed colors as final specifications.
-
-### Usability requirements
-
-- Core tasks work at a 360-pixel viewport without horizontal scrolling.
-- Keyboard and screen-reader users can complete import, editing, planning, and grocery checkoff.
-- Drag-and-drop has button/menu alternatives; actions never depend on hover alone.
-- Slow imports have honest progress states and recovery paths, not invented completion percentages.
-- Destructive actions have undo or clear confirmation proportional to their impact.
-- Offline recipes and lists show their sync status. Conflicts must not silently erase changes.
-- Wake-lock and installation features degrade gracefully when unsupported.
-- Nutrition or dietary features, if added, distinguish source facts from inferred estimates.
-
-## 4. Proposed architecture
-
-### Foundation
-
-| Layer | Proposed choice | Rationale |
-| --- | --- | --- |
-| Backend | Django 5.2 on a tested, supported Python version; initially Python 3.13. | Retains working code, ORM, migrations, admin, and authentication. |
-| API | Django REST Framework with versioned endpoints and documented schemas. | Centralizes validation, permissions, serialization, and API contracts. |
-| Database | Managed PostgreSQL; local PostgreSQL 16 via Compose initially. | Matches current settings and supports relational features and search. |
-| Frontend | React + TypeScript with a Vite build. | Suitable for an interactive private application with an existing backend. |
-| UI | Accessible primitives with a custom visual system. | Establishes consistent interactions without accepting a generic visual identity. |
-| Session | Same-origin Django session authentication and CSRF protection. | Keeps authentication authority in one backend and simplifies browser configuration. |
-| Async work | Durable import jobs; Celery with managed Redis-compatible infrastructure when jobs are introduced. | Separates external latency and retries from interactive requests. |
-| Files | Object storage for uploads and permitted stored media when needed. | Avoids relying on ephemeral application disks. |
-| Billing | Hosted checkout/customer portal with server-side entitlements. | Keeps payment collection outside the application. |
-| Observability | Structured logs, error reporting, operational metrics, and minimal product events. | Makes failures and customer value measurable. |
-
-These are proposed choices, not newly installed components. Confirm hosting fit and lock exact dependencies during the foundation phase. Add server rendering later if authorized public recipe pages make indexing a product requirement.
-
-### API evolution
-
-| Endpoint family | Purpose |
-| --- | --- |
-| `POST /api/v1/imports` | Submit URL or text; return an import identifier and status. |
-| `GET /api/v1/imports/{id}` | Fetch owned job status, errors, and extraction preview. |
-| `POST /api/v1/recipes` | Save a validated draft or manually entered recipe. |
-| `GET /api/v1/recipes` | Search/filter the authorized library. |
-| `GET/PATCH/DELETE /api/v1/recipes/{id}` | Read and manage authorized recipes. |
-| `/api/v1/collections` | Organize saved recipes. |
-| `/api/v1/meal-plans` | Manage meals, servings, dates, and household access. |
-| `/api/v1/grocery-lists` | Generate and edit consolidated lists. |
-| `/api/v1/cooking-sessions` | Store progress, completion, and feedback. |
-| `/api/v1/households` | Manage membership, invitations, and shared resources. |
-| `/api/v1/billing` | Checkout, portal access, and subscription status. |
-
-Use predictable validation errors, request identifiers, bounded pagination, and idempotency for imports and billing-sensitive actions. Keep old routes behind a documented compatibility period while the current interface is replaced; retire them after traffic and clients are checked.
-
-### Data model changes
-
-| Entity | Main responsibility |
-| --- | --- |
-| User/Profile | Account identity, preferences, timezone, locale. |
-| Household/Membership | Shared workspace, roles, invitations, membership lifecycle. |
-| RecipeSource | Canonical source metadata, attribution, parser version, last fetch status. |
-| SavedRecipe | Private or explicitly shared recipe content, owner, source reference, personal changes. |
-| RecipeIngredient | Original text plus quantity/range, unit, ingredient identity, preparation, optionality, group, and parse confidence. |
-| RecipeStep | Ordered content, optional section, ingredient references, timer metadata. |
-| Collection/CollectionEntry | User organization and favorites. |
-| ImportJob | Input type, owner, state, attempts, errors, provider metadata, usage/cost. |
-| MealPlan/MealPlanEntry | Date, meal slot, servings, recipe reference, leftovers/free text. |
-| GroceryList/GroceryItem | Consolidated quantities, source contributions, aisle, manual edits, checkoff state. |
-| CookingSession | Progress, completed time, actual duration, notes, make-again feedback. |
-| Subscription/UsageLedger | Entitlements, billing state, metered AI usage, quota reservations. |
-
-Do not implement every entity before alpha. Add entities with their milestone. Separate original source content from user modifications so source refreshes cannot overwrite personal edits. Preserve original ingredient strings when parsing is uncertain. Mass/volume conversion requires ingredient-specific information; incompatible amounts remain separate.
-
-### Legacy data migration
-
-1. Back up the existing production database, if any, and inspect actual record counts and schema.
-2. Add nullable ownership/provenance fields and new tables before changing read paths.
-3. Put legacy unowned recipes into an admin-controlled legacy collection; do not infer ownership from imports or view counters.
-4. Backfill normalized records in bounded, restartable batches while preserving identifiers and source references.
-5. Verify counts, representative content, permissions, and rollback behavior in staging.
-6. Switch reads/writes, then retire obsolete columns only after the rollback window.
-
-## 5. Security, reliability, and operational work
-
-| Priority | Required work | Acceptance evidence |
-| --- | --- | --- |
-| P0 | Environment-driven secret, debug, allowed hosts, HTTPS/proxy and cookie settings. | Production deployment checks pass or have explicit platform-specific dispositions. |
-| P0 | Safe fetching: public destinations only, DNS/IP checks, redirect revalidation, bounded ports, timeouts, response size, and content types. | Tests block localhost, private/link-local destinations, metadata endpoints, and redirect escapes; use controlled fixtures. |
-| P0 | Authentication and per-object authorization. | Cross-user and cross-household access tests fail closed. |
-| P0 | Request/output schemas and AI quotas. | Non-object JSON returns 400; malformed extraction cannot be saved; concurrency cannot bypass quotas. |
-| P1 | Atomic imports and canonicalization. | Concurrent duplicate requests are safe; intentional URL parameters are preserved. |
-| P1 | Bounded jobs, retries, cancellation, and provider failure handling. | Timeouts and worker restarts resolve to visible states without duplicate charges/saves. |
-| P1 | Privacy-aware logging. | Tokens, raw private recipes, and sensitive URL query strings are excluded or redacted. |
-| P1 | Backups, restore, migration discipline, health checks, alerts. | Successful restore drill and staging deployment/rollback exercise. |
-| P1 | Lock dependencies and CI. | Reproducible build and PostgreSQL-backed checks on pull requests. |
-| P1 | Upload controls when uploads launch. | Size/type validation, private storage, safe serving, and lifecycle cleanup verified. |
-| P2 | Source refresh and provenance. | Refresh presents a reviewable update without replacing personal edits. |
-
-Treat fetched text as untrusted input to the extraction model. The extraction workflow should have no authority to execute instructions, access other users' data, or invoke unrelated tools. Validate outputs even when the prompt requests strict JSON.
-
-## 6. Delivery sequence
-
-**Planning assumption:** One experienced full-stack engineer working primarily on FlavorBuddy, with periodic design feedback. Milestone estimates total approximately 12–19 engineering weeks if done sequentially. Recruiting, feedback cycles, external approvals, and production incidents can extend calendar time. Re-estimate after the first milestone; a complete household/offline experience has meaningful scope.
-
-### M0 — Product validation and baseline: 1 week
-
-- Interview 8–12 target users about recent real meal decisions and their existing tools.
-- Recruit 20–30 prospective pilot users and identify the initial audience segment.
-- Review actual legacy data and deployment history, if any.
-- Run the backend against local PostgreSQL and record import behavior on a representative site set.
-- Prototype import, recipe detail, week, and groceries; test task completion before polishing all screens.
-- Define event names, success criteria, and the first-release exclusions.
-
-**Exit:** A prioritized problem statement, pilot cohort, reviewed prototype, and verified technical baseline. If users only want a bookmark manager, revisit subscription positioning before building planning automation.
-
-### M1 — Production foundation and private libraries: 2–3 weeks
-
-- Lock dependencies and add CI, PostgreSQL integration checks, production settings, and deployment configuration.
-- Introduce versioned APIs, schemas, safe fetching, error handling, rate limits, and import idempotency.
-- Add customer authentication, ownership, basic recipe CRUD, and export fundamentals.
-- Deploy staging with managed PostgreSQL, health checks, logging, and backups.
-- Establish the frontend shell, design tokens, and accessible components.
-
-**Dependencies:** M0 technical baseline and initial account/data decisions.
-
-**Exit:** Authenticated users can manage only their own recipes on staging; invalid inputs cannot crash normal API handling; no unresolved critical exposure; backup/restore and CI work.
-
-### M2 — Reliable saving and beautiful cooking: 3–4 weeks
-
-- Build the import preview/save flow for URL and pasted text.
-- Add owned import-job status and bounded AI fallback; preserve source attribution and correction paths.
-- Implement recipe box, detail, editing, collections, notes, and basic cook mode.
-- Handle missing images/content, failed sites, slow networks, and interrupted authentication.
-- Release to the private pilot cohort and collect observed usability feedback.
-
-**Dependencies:** M1 permissions, import foundation, and UI system.
-
-**Exit:** Pilot users can independently import, correct, save, find, and cook a recipe. Source failures provide a usable text/manual fallback. No severe accessibility failures in the core flow.
-
-### M3 — Weekly planning and groceries: 3–4 weeks
-
-- Add structured ingredient parsing and numeric servings while preserving original text.
-- Implement flexible dinner planning, serving adjustments, meal swaps, and leftovers/free-text entries.
-- Generate grocery lists with compatible-unit consolidation, source contributions, manual additions, and already-have review.
-- Preserve purchased states and user edits when plans change; explain resulting list updates.
-- Add cooking completion and make-again feedback.
-
-**Dependencies:** M2 stable recipe content; ingredient parsing precedes trustworthy consolidation.
-
-**Exit:** A user can plan several meals, create an accurate reviewed list, shop, and record cooking completion. Representative ingredient edge cases pass and critical list errors are fixed.
-
-### M4 — Household value and paid beta: 2–4 weeks
-
-- Add invitations, membership roles, explicit sharing, and shared plans/lists.
-- Add offline read access for saved recipes and queued grocery checkoffs with conflict handling.
-- Implement checkout, customer portal, entitlements, quotas, and verified idempotent webhooks.
-- Run a pricing experiment and monitor AI costs per active/paying household.
-- Introduce simple Tonight suggestions based on saved recipes, available time, and cooking history if data quality supports them.
-
-**Dependencies:** M3 repeated use, household authorization design, and billing setup.
-
-**Exit:** Shared activity is dependable, billing lifecycle tests pass, export/cancellation remain accessible, and early retention/value evidence justifies asking for payment.
-
-### M5 — Launch readiness and measured growth: 1–3 weeks
-
-- Resolve pilot issues, finish accessibility/performance work, and perform restore and rollback drills.
-- Finalize support, onboarding, account deletion, source handling, and public product information.
-- Release to a limited wider audience with operational alerts and budget limits.
-- Test one acquisition channel at a time, beginning with relevant cooking communities or creator partnerships.
-- Consider screenshot import or grocery checkout only after the core workflow meets its release criteria.
-
-**Dependencies:** M4 operational readiness and the go/no-go review below.
-
-**Exit:** A controlled launch with named ownership for support, incidents, product metrics, and follow-up prioritization.
-
-## 7. Prioritized backlog
-
-| ID | Deliverable | Priority | Milestone | Depends on |
-| --- | --- | --- | --- | --- |
-| FB-001 | PostgreSQL baseline, locked environment, CI | P0 | M0–M1 | None |
-| FB-002 | Production settings and safe URL fetching | P0 | M1 | FB-001 |
-| FB-003 | Accounts, ownership, authorization tests | P0 | M1 | FB-001 |
-| FB-004 | Versioned API, schema validation, CRUD | P0 | M1 | FB-003 |
-| FB-005 | Staging deployment, health, backup/restore | P0 | M1 | FB-002 |
-| FB-006 | Design system and frontend navigation | P1 | M1 | M0 prototype |
-| FB-007 | Import jobs, preview/save, AI quotas | P1 | M2 | FB-002–004 |
-| FB-008 | Recipe box, collections, editing, notes | P1 | M2 | FB-004, FB-006 |
-| FB-009 | Cook mode and completion feedback | P1 | M2–M3 | FB-008 |
-| FB-010 | Structured ingredients and servings | P1 | M3 | FB-007 |
-| FB-011 | Weekly plan and grocery generation | P1 | M3 | FB-010 |
-| FB-012 | Household memberships and shared lists | P1 | M4 | FB-003, FB-011 |
-| FB-013 | Offline recipe reading and list sync | P1 | M4 | FB-008, FB-012 |
-| FB-014 | Billing, entitlements, webhook lifecycle | P1 | M4 | FB-003, FB-007 |
-| FB-015 | Explainable Tonight suggestions | P2 | M4 or later | FB-009, FB-011 |
-| FB-016 | Screenshot extraction and private uploads | P2 | After core validation | FB-007, storage controls |
-| FB-017 | Grocery affiliate checkout | P2 | After approval | FB-010–011, partner access |
-| FB-018 | Creator-authorized collections | P2 | After demand validation | Sharing and commercial agreement |
-
-P0 means foundational or exposure-blocking work. P1 means necessary for the planned release experience. P2 is optional investment after evidence supports it. No task is complete merely because its UI exists; its acceptance criteria and relevant failure paths must work.
-
-## 8. Hosting and local operation
-
-### Current local setup
-
-Start Docker Desktop first, then run from the backend repository:
-
-```bash
-cp .env.example .env
-docker compose up -d
-python3.13 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py createsuperuser  # Optional staff administration
-python manage.py runserver
-```
-
-Avoid overwriting an existing `.env`; copy only on first setup. Database values in the example match Compose defaults. Set `REPLICATE_API_TOKEN` only when using AI conversion. The existing interface does not require Node, object storage, or a frontend build.
-
-### Recommended early hosting
-
-- Paid Render web service running Django through Gunicorn.
-- Managed PostgreSQL in the same region, with database TLS/private connectivity configured as appropriate.
-- Build React to static assets and route the app/API under one origin where practical.
-- Configure Django admin static files, frontend asset caching, and SPA routing explicitly.
-- Add a durable worker and queue in M2 when import jobs arrive.
-- Add object storage only when implementing uploads or permitted stored media.
-- Maintain separate staging and production databases, credentials, and billing/test environments.
-
-A rough early-production planning allowance is **$30–80/month excluding AI, substantial traffic, and paid ancillary services**. A separate worker, persistent queue, staging services, and uploads can exceed this range. Reprice the actual topology before deployment. Render published a July 2026 example of approximately $13/month for its smallest paid web-plus-Postgres combination before additional usage; this is a dated reference, not a current quote.
-
-If Google Cloud is preferred, use Cloud Run, Cloud SQL, Secret Manager, Artifact Registry, and Cloud Storage as needed. Choose an explicit worker/task design compatible with Cloud Run execution; do not assume an in-process thread continues after a request. Estimate database, networking, build, and operational costs separately.
-
-### Configuration inventory
-
-| Existing variables | Planned configuration |
-| --- | --- |
-| `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST`, `POSTGRES_PORT` | Production TLS options, connection limits, and pool strategy. |
-| `PROJECT_URL` | Canonical external origin and explicit trusted origins. |
-| `REPLICATE_API_TOKEN` | Provider/model selection, request limits, usage budgets, and secret rotation. |
-| No environment-driven secret/debug/hosts today | `DJANGO_SECRET_KEY`, `DJANGO_DEBUG`, `DJANGO_ALLOWED_HOSTS`, trusted proxy/CSRF settings. |
-| No worker/storage/billing configuration today | Queue connection, object-storage settings, payment keys and webhook secrets, transactional email, error reporting. |
-
-### Deployment checklist
-
-- Reproducible install/build and locked production dependencies.
-- Back up before significant migrations; execute migrations as a controlled release step.
-- Collect/build static assets and start the production application server.
-- Validate health, authentication, import, and authorized data access after deployment.
-- Alert on sustained errors, job failures, spending anomalies, and database capacity.
-- Document rollback compatibility and restore steps; test them before launch.
-
-## 9. Monetization and unit economics
-
-### Pricing experiments
-
-| Offer | Proposed price to test | Value |
-| --- | --- | --- |
-| Free | $0 | Useful private library, basic import/editing/cook mode, bounded AI allowance. |
-| Plus | $4.99/month or $39/year | Advanced organization, weekly suggestions, offline features, larger AI allowance. |
-| Household | $7.99/month or $59/year | Shared planning/groceries, member preferences, household history. |
-
-Start with one paid plan if two tiers complicate the beta. Define exact entitlements before implementation and keep them server-authoritative. Meter expensive extraction without making ordinary cooking inconvenient. Preserve exports and clear cancellation access.
-
-Samsung Food+ lists $6.99/month or $59.99/year in its referenced support article, with regional variation. This is a competitive anchor, not proof that FlavorBuddy can command the same price.
-
-### Revenue extensions
-
-1. **Grocery affiliate integration:** Convert reviewed recipes or weekly lists into a shopping link. Instacart offers a developer platform and affiliate application process; approval and commercial terms must be established. Do not include unverified commissions in the base forecast.
-2. **Creator-authorized collections:** Sell useful meal plans or recipe packs with explicit creator participation and revenue sharing. Test distribution and demand before building a marketplace.
-3. **Business tooling later:** Consider recipe-import or management tools for creators only if they request and will pay for them.
-
-Public discovery should use original or authorized material. Keep personal imports private by default and make attribution visible. Any broader publication or partnership needs an explicit content and commercial plan.
-
-### Economics to measure
-
-- Contribution per paid account = net subscription revenue minus payment fees, variable AI cost, variable infrastructure, and variable support cost.
-- Monthly equivalents of annual offers are $3.25 for Plus and about $4.92 for Household before fees and costs.
-- At the proposed Plus annual price, 1,000 paid accounts represent $39,000 annual gross subscription revenue, not profit or a sales forecast.
-- Track cost per successful import, AI fallback frequency, expensive-user percentiles, refund rate, and support time.
-- Reserve quota before provider calls and settle usage afterward; retries must not unintentionally multiply user charges or budget consumption.
-- Set per-account and global usage limits; do not promise unlimited AI before observing real usage.
-- Estimate acquisition payback only after measuring churn and contribution margin.
-
-## 10. Measurement and launch criteria
-
-### Product metrics
-
-**Primary metric:** Weekly cooking households—households or individual accounts that record at least one completed cooking session during the week. Until households exist, report the account-based version explicitly. Completion is self-reported and should be checked against interview observations.
-
-| Metric | Definition | Initial hypothesis |
-| --- | --- | --- |
-| Import reliability | Valid recipe imports producing a usable preview / supported valid import attempts. | At least 90% across the agreed pilot site set; report unsupported sources separately. |
-| First-week activation | New users who save at least three recipes and complete one cooking session within seven days. | At least 40% in the recruited pilot. |
-| Four-week retention | Activated users with a meaningful cooking/planning action in week four. | At least 30%; investigate segment differences and small-sample uncertainty. |
-| Grocery quality | Generated lists requiring major quantity or ingredient corrections. | Fewer than 5% in observed pilot sessions. |
-| Paid intent | Activated users who actually purchase at a tested price. | Seek at least five pilot purchases before assuming paid demand. |
-
-These targets are provisional decision aids. A 20–30-user pilot is too small for confident market-size or conversion conclusions. Record cohort dates and exact event definitions before evaluating results.
-
-### Operational targets
-
-- No unresolved critical authorization, safe-fetching, or spending-control defects.
-- Core non-import API operations target p95 under 500 ms at the documented beta load.
-- Import submission returns a job promptly; external-provider completion is measured separately.
-- Monitor failed jobs and overdue jobs rather than only HTTP response codes.
-- Establish actual recovery objectives before paid launch; initial proposal: recovery point within 24 hours and recovery within four hours, subject to the selected database plan and a demonstrated restore.
-
-### Analytics events
-
-Use a small event set: `import_started`, `import_completed`, `import_failed`, `recipe_saved`, `meal_planned`, `grocery_list_generated`, `cook_started`, `cook_completed`, `subscription_started`, and `subscription_canceled`. Prefer identifiers and coarse metadata; do not send raw recipes, private notes, or sensitive URLs to product analytics by default.
-
-### Go/no-go review
-
-Launch the paid beta only when permission boundaries, billing lifecycle, cost limits, restoration, and core usability pass. Broaden marketing only when users repeat the workflow and at least some pay for it. If saving is popular but planning is not, improve retrieval/cooking before expanding household automation. If importing remains unreliable, pause feature expansion and fix extraction and recovery.
-
-## 11. Verification strategy
-
-- **Backend:** PostgreSQL integration tests for ownership, CRUD, imports, duplicate races, migration behavior, and list generation.
-- **External content:** Representative saved HTML fixtures for deterministic parsing; small controlled live smoke tests tracked separately because websites change.
-- **AI:** Mock normal/error/timeouts in CI, validate schemas, and maintain a small human-reviewed extraction set for bounded provider evaluation.
-- **Ingredient correctness:** Fractions, ranges, optional ingredients, group headings, incompatible units, duplicate ingredients, and serving adjustments.
-- **Frontend:** End-to-end import/save/cook/plan/shop flows and targeted accessibility checks at mobile and desktop sizes.
-- **Offline/sharing:** Reconnection, concurrent checkoff, membership removal, stale edits, and conflict handling.
-- **Billing:** Test-mode checkout, renewal, failed payment, cancellation, refund handling, webhook replay, and out-of-order events.
-- **Operations:** Staging deployment, health checks, backup restore, and backward-compatible rollback exercise.
-
-Expand tests based on real risk and observed failures. The current 17 passing tests are a starting point, not evidence that the planned product or production environment is validated.
-
-## 12. Risks and decisions
-
-| Risk | Response |
-| --- | --- |
-| A polished importer does not create recurring value. | Measure cooking and planning behavior before investing in growth. |
-| Source sites block or change extraction. | Track domain-level reliability, retain editable fallback, avoid promising universal imports. |
-| Incorrect quantities undermine trust. | Preserve source text, flag uncertainty, and let users review grocery generation. |
-| AI expenses or abuse exceed revenue. | Authenticate paid work, reserve quotas, cap input sizes and retries, monitor spend. |
-| Household/offline complexity expands the schedule. | Ship private online flows first and gate later features independently. |
-| Recommendation quality is weak with sparse data. | Begin with explicit filters and explainable rules over saved recipes. |
-| A public library introduces content issues. | Default to private imports; plan authorized public content separately. |
-| Existing users/data are overlooked. | Audit actual deployment and backups before changing schema or routes. |
-
-### Decisions required before their dependent milestone
-
-- **Before M1:** Confirm hosting preference, initial login methods, and any existing production database/customer obligations. Default proposal: Render, Django sessions, private individual accounts.
-- **Before M2:** Choose and benchmark the extraction provider/model; confirm anonymous-preview limits. Existing Replicate integration is a starting point, not a validated cost/quality choice.
-- **Before M3:** Confirm initial planning scope. Default: dinners and flexible free-text meals, without complete pantry inventory or nutrition targets.
-- **Before M4:** Confirm household roles, offline scope, paid plan packaging, support responsibility, and billing provider.
-- **Before public content or checkout integrations:** Establish source authorization and partner access/terms.
-
-### Roadmap maintenance
-
-Review progress weekly against milestone exit criteria. Maintain owner, status, estimate, and evidence for each backlog item in the chosen issue tracker when implementation begins. Revisit roadmap scope monthly using pilot feedback, reliability, and retention. Record meaningful decisions here with their date and rationale; keep speculative ideas out of committed milestones.
-
-## 13. Immediate next actions
-
-1. Verify the current app against PostgreSQL and establish a representative recipe-import fixture set.
-2. Confirm the initial audience through interviews and recruit the pilot cohort.
-3. Review a mobile prototype covering import, cooking, planning, and grocery review.
-4. Implement M1 production settings, safe fetching, private ownership, and schema validation.
-5. Deploy staging and complete the first restore drill before inviting users to store personal content.
-
-## 14. Source references
-
-External references were consulted during the September 6, 2026 review. Recheck provider capabilities and prices before purchasing or implementation.
-
-- [Django deployment checklist](https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/)
-- [recipe-scrapers documentation](https://docs.recipe-scrapers.com/)
-- [Render Django deployment guide](https://render.com/docs/deploy-django)
-- [Render hosting cost explanation and July 2026 example](https://render.com/articles/how-much-does-cloud-application-hosting-cost-for-small-businesses)
-- [Google Cloud: Django on Cloud Run](https://docs.cloud.google.com/python/django/run)
-- [React application setup guidance](https://react.dev/learn/build-a-react-app-from-scratch)
-- [Paprika product capabilities](https://www.paprikaapp.com/)
-- [Samsung Food+ capabilities and pricing](https://support.samsungfood.com/hc/en-us/articles/32709269852052-What-s-Included-in-Your-Samsung-Food-Subscription)
-- [Instacart developer affiliate conversion and payments documentation](https://docs.instacart.com/developer_platform_api/guide/concepts/launch_activities/conversions_and_payments/)
+| 1 / Engineering | Reconcile roadmap and setup documentation | One current status table; historical work clearly archived; immutable lifecycle reflected throughout current instructions |
+| 2 / Engineering + product owner for SMTP configuration | A3 protected managed staging | Green remote CI, digest-pinned release, real HTTPS/two-user smoke, private media, scheduled cleanup, managed restore and compatible rollback evidence; recovery email delivery tested once a sender is configured |
+| 3 / Engineering | Focused FlavorGirls v2 contract | Grant-filtered phrase search, stable cursor pagination, UUID detail with validated RecipeDocumentV1, immutable ingredient/step IDs, no-content unavailable response, v1 compatibility and client smoke |
+
+V2 initially supports q, relevance/newest/quickest, limit/cursor and max_total_minutes.
+Rating sorts, votes, tag taxonomy and generated recipes are excluded. App tokens use
+version-specific audiences but the same app grants and shared usage limits. Existing
+v1 clients retain their endpoint and token contract.
+
+A3 may be partially complete: SMTP delivery, operator browser access and observations
+must be listed individually, rather than marking the entire milestone done after a deployment.
+Managed SQL backups do not back up GCS objects; record object verification separately.
+
+## Next after the authorized increment
+
+1. Observe five target users importing/saving/cooking. Test whether draft/finalize/variation
+   behavior is understandable without explanation. Resolve observed friction first.
+2. Connect one real FlavorGirls server to its explicitly granted catalog and verify
+   search → choose → fetch → cook, including unavailable recipes. No browser secrets.
+3. Improve explainable ingredient matching with representative fixtures. Add a reviewed
+   missing-item grocery list; defer quantity consolidation until normalization is reliable.
+4. Add the smallest useful measurement set: import outcome, save/finalization, cook start
+   and completion, and repeat use. Keep private recipe text/notes out of analytics.
+
+## Deferred until evidence supports them
+
+- Live photo-to-pantry: provider adapter, uncertainty/output contract, actual cost settlement
+  and separately bounded evaluation spend before enabling it.
+- Paid subscriptions: value/cost evidence, entitlement and webhook lifecycle, downgrade/export
+  behavior, and provider budgets before checkout.
+- AI recipe/image generation: explicitly requested private drafts, provenance, budgets and
+  idempotency; no automatic generation on empty search.
+- Public feedback/reports/voting: identity/permission design, abuse controls and a defined
+  availability policy before ranking. Public sharing itself is already implemented.
+- Weekly planning, households, full offline sync and grocery checkout: only after the
+  core workflow and ingredient correctness demonstrate demand.
+
+## Measures and release gates
+
+Primary outcome: weekly accounts that record a cooking completion (self-reported).
+Track import reliability on an agreed source set, first-week activation, return cooking,
+and observed draft/variation confusion. Small pilots provide directional evidence,
+not precise market conversion estimates. Paid intent is not a current release gate.
+
+No launch claim until actual hosting, isolation, recovery and core usability are demonstrated.
+No broader rollout until user observations have been reviewed. Maintain owner, status,
+blocking input, next action and dated evidence for each active item; update weekly.

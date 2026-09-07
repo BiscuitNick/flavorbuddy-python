@@ -82,15 +82,20 @@ rate-limited in PostgreSQL by address and account identity.
 
 Recipe fields: title, description, author, total_time (minutes or null), yields,
 source_url, image, ingredients and instructions (arrays of strings), notes, favorite.
-Saving requires title, ingredients, and instructions. PATCH replaces provided arrays
-and requires the last-read `version`; stale edits return 409. Owner fields are ignored;
-ownership is always assigned by the server. Exports use `schema_version: 1`.
-List parameters: `q`, `favorite=true`, `page`, and `page_size` (1–100).
+Drafts may be incomplete and remain private. Finalization requires title, ingredients,
+and instructions and permanently locks content. PATCH edits draft content; notes and
+favorites remain mutable after finalization. PATCH and visibility changes require the
+last-read `version` for conflict detection. Make a variation to change a finalized recipe:
+it creates a private draft with a new UUID and `inspired_by` link. Source URLs are not unique.
 
-Save a preview by including its `import_id` with reviewed content. Retrying that save
-returns the same recipe; deleting it does not allow the original draft to resurrect
-it. Different users can save independent versions of one URL. One source copy per
-user is enforced by PostgreSQL. Multiple manual recipes with no URL are allowed.
+Additional routes: `POST /api/v1/recipes/{id}/finalize`, `/visibility`, `/variations`;
+`GET /api/v1/shared-recipes` and `/shared-recipes/{public_id}`. Sharing changes visibility
+without replacing the UUID. Draft deletion is permanent; finalized deletion archives the
+identity. Public archived links return 410. Personal notes/favorites/photos stay private.
+
+Save a preview by including its `import_id`; repeated saves reuse its recipe identity.
+Ownership is assigned by the server. List parameters include `q`, `favorite=true`,
+`page`, and `page_size` (1–100). Exports use `schema_version: 1`.
 
 Old `/parse-recipe-url`, `/get-recipes`, and `/convert-raw-recipe` routes return 410.
 `/test-example` is removed. Ownerless legacy records retain their IDs/content and
@@ -117,8 +122,7 @@ are available only through staff administration, never consumer APIs.
 Drafts and cooking progress are stored on the device under account-specific keys.
 They survive ordinary errors and session expiry. This is not offline synchronization;
 saved recipes still require a connection. Timers need the page open; wake-lock is
-best-effort. Cooking completion is self-reported. Deletion requires confirmation
-and is permanent. Export your library before destructive changes.
+best-effort. Cooking completion is self-reported. Deletion requires confirmation; drafts are deleted and finalized recipes are archived. Export your library before destructive changes.
 
 ## Configuration and deployment
 
@@ -136,14 +140,13 @@ HTTPS redirection, HSTS, and static serving are enabled in production.
 `Dockerfile` builds frontend assets and runs Gunicorn as a non-root user. The image
 defaults to production and fails without required configuration. Use a single release
 migration command before replacing workers. `/health/live` checks the process;
-`/health/ready` checks PostgreSQL with bounded database timeouts. No uploads/object
-storage are required; the existing GCP/Cloud SQL direction remains compatible.
+`/health/ready` checks PostgreSQL with bounded database timeouts. Private uploads require a separate private bucket in production. See the protected GCP staging configuration.
 
 See [deployment operations](docs/operations/deployment.md) and the
 [execution evidence and unfinished release gates](docs/execution/README.md).
-No public infrastructure, paid evaluation, or pilot outreach has been authorized or
-performed. Planning, groceries, households, billing, broad generation, background
-jobs, uploads, and full offline sync remain out of scope.
+Protected staging and remote CI are authorized in the September 7 increment. Current
+hosted evidence and unresolved inputs are in [release status](docs/execution/07-release-and-v2.md).
+Live AI, billing, voting, households and full offline synchronization remain deferred.
 
 ## Starter recipe collection
 
@@ -154,8 +157,7 @@ copies. Load the bundled catalog with:
 .venv/bin/python manage.py seed_starter_recipes
 ```
 
-The requested target is 500; the pinned Public Domain Recipes repository currently
-provides **415 valid recipe entries**, all included. No duplicate padding or second
+The accepted collection size is **415 valid recipe entries**, all included from the pinned Public Domain Recipes repository. No duplicate padding or second
 source was used. See `data/starter/README.md` for license, revision, provenance and
 rebuild instructions. Seeding can be repeated without changing private copies.
 
@@ -177,3 +179,21 @@ The separate catalog integration uses registered OAuth clients and explicit star
 grants. See [expansion execution](docs/execution/05-expansion.md) for commands,
 limits, the OpenAPI contract, local client and durable fixture capture demo. Real
 visual detection, paid plan lifecycle and managed staging are not claimed complete.
+
+## FlavorGirls catalog v2
+
+Read-only `GET /api/integrations/v2/catalogs/{catalog}/recipes` supports phrase search
+across title, description and ingredient source text, relevance/newest/quickest sorts,
+`limit`/signed `cursor`, and `max_total_minutes`. Unknown/repeated parameters fail with 400.
+`GET /api/integrations/v2/recipes/{uuid}` returns `{document, status}`. RecipeDocumentV1
+preserves source strings, adds recipe-scoped stable ingredient/step IDs and leaves unknown
+quantities, timers, equipment and references null. It does not infer cooking facts.
+
+Obtain tokens at the existing `/api/integrations/v1/oauth/token`, requesting `catalog:read`
+and resource `<PROJECT_URL>/api/integrations/v2/`. Tokens are restricted to the requested
+version; v1 and v2 share grants, revocation and quotas. Only explicit starter catalog
+membership is eligible; public sharing never automatically grants an app access.
+
+Private/archived granted identities return 410 with a null document; unknown/ungranted
+identities return 404. Feedback is null because it is not implemented. See the
+[OpenAPI contract](docs/api/catalog-v2.openapi.json) and [document schema](docs/api/RecipeDocumentV1.schema.json).

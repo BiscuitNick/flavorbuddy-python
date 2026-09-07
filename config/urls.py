@@ -21,6 +21,7 @@ from django.urls import include, path
 from .health import live, ready
 
 urlpatterns = [
+    path("api/integrations/v2/", include("integrations.urls_v2")),
     path("health/live", live),
     path("health/ready", ready),
     path("api/integrations/v1/", include("integrations.urls")),

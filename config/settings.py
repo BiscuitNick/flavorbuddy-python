@@ -287,6 +287,7 @@ else:
 
 # App-only access is deliberately separate from the session-authenticated API.
 CATALOG_AUDIENCE = PROJECT_URL + "/api/integrations/v1/"
+CATALOG_V2_AUDIENCE = PROJECT_URL + "/api/integrations/v2/"
 APP_GLOBAL_DAILY_LIMIT = int(os.environ.get("APP_GLOBAL_DAILY_LIMIT", "10000"))
 APP_TOKEN_MINUTE_LIMIT = int(os.environ.get("APP_TOKEN_MINUTE_LIMIT", "60"))
 OAUTH2_PROVIDER = {

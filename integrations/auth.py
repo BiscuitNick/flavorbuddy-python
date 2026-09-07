@@ -39,7 +39,7 @@ class CatalogValidator(OAuth2Validator):
 
     def _check_and_set_request_resource(self, request):
         super()._check_and_set_request_resource(request)
-        if request.resource != [settings.CATALOG_AUDIENCE]:
+        if request.resource not in ([settings.CATALOG_AUDIENCE], [settings.CATALOG_V2_AUDIENCE]):
             raise CustomOAuth2Error(
                 error="invalid_target",
                 description="Use the configured catalog resource.",
@@ -50,7 +50,7 @@ class CatalogValidator(OAuth2Validator):
             return False
         access = request.access_token
         return (
-            access.resource == [settings.CATALOG_AUDIENCE]
+            access.resource in ([settings.CATALOG_AUDIENCE], [settings.CATALOG_V2_AUDIENCE])
             and access.user_id is None
             and access.application.authorization_grant_type == "client-credentials"
             and usable(access.application)
