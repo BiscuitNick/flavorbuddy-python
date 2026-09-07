@@ -39,7 +39,7 @@ jobs:
       - run: npm run test:e2e --prefix frontend
         env:
           FLAVORBUDDY_PYTHON: python
-      - run: python manage.py check --deploy
+      - run: python manage.py check --deploy --fail-level WARNING
         env:
           DJANGO_ENV: production
           DJANGO_DEBUG: 'false'
