@@ -11,11 +11,11 @@ Older plan appendices are dated historical evidence, not a current backlog.
 | E4/E5 | Durable fixture capture and quota foundations only; live AI absent | [Expansion limits](05-expansion.md) |
 | Recipe lifecycle | Immutable finalized UUID recipes, private drafts, variations, sharing/archive | [Lifecycle](06-recipe-lifecycle.md) |
 | A3 + catalog v2 | V2/staging deployed; restore/rollback passed; Firebase activation and pilot inputs remain | [Current release evidence](07-release-and-v2.md) |
-
 | Firebase Google sign-in | Implemented with protected linking and provider session checks; hosted Google provider activation pending | [Firebase increment](08-firebase-auth.md) |
 
-The previous release passed 87 backend and 16 browser tests. Current Firebase test
-results and rollout state are recorded in its own evidence.
+Current CI passes 101 backend and 20 browser scenarios. The Firebase-ready release is
+deployed with activation gated pending the Google provider console step. Detailed
+results and rollout state are recorded in the Firebase evidence.
 
 Finalization replaces the earlier general-purpose editable saved-recipe behavior.
 StarterRecipe now provides original-source archives/legacy aliases to canonical Recipe;

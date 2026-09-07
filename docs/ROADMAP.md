@@ -41,8 +41,10 @@ observations. SMTP setup has been replaced by Firebase authentication. The real 
 | Visual capture | Durable fixture-only detection/review/approval; live detection absent | Disabled by design | Not evaluated |
 | Operations | CI workflow, Docker, Terraform and local restore rehearsal | Staging, cleanup, isolated restore and compatible rollback passed | Operator use pending |
 
-The previous release passed 87 PostgreSQL tests and 16 browser scenarios with green CI.
-Firebase verification is recorded in [08-firebase-auth](execution/08-firebase-auth.md). Current release test counts
+Current verification: 101 PostgreSQL tests and 20 desktop/mobile browser scenarios
+pass in green CI. The Firebase-ready image is deployed with activation gated pending
+the Google provider console step; hosted Google sign-in is not yet verified.
+See [08-firebase-auth](execution/08-firebase-auth.md). Current release test counts
 and hosted evidence are recorded in [07-release-and-v2](execution/07-release-and-v2.md),
 not inferred from feature presence. GitHub had no workflow runs at the start of this increment.
 

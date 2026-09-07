@@ -1,8 +1,8 @@
 # Protected staging operations
 
 Updated September 7, 2026. Staging was authorized and provisioned in the current
-increment. See [release evidence](../execution/07-release-and-v2.md) for exact checks
-and unfinished gates. The [original proposal](../history/staging-proposal-2026-09-06.md)
+increment. See [original release evidence](../execution/07-release-and-v2.md) and
+[the current Firebase increment](../execution/08-firebase-auth.md) for checks and unfinished gates. The [original proposal](../history/staging-proposal-2026-09-06.md)
 is retained as historical cost/architecture context.
 
 ## Environment
