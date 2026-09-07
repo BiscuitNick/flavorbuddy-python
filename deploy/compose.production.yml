@@ -1,0 +1,26 @@
+# Local production-style rehearsal. No infrastructure provisioning.
+# Run with: docker compose -f docker-compose.yml -f deploy/compose.production.yml up --build -d
+services:
+  web:
+    build: .
+    ports:
+      - '127.0.0.1:8003:8000'
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DJANGO_ENV: production
+      DJANGO_DEBUG: 'false'
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set a random 50+ character secret}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:?Set explicit hosts}
+      PROJECT_URL: ${PROJECT_URL:?Set the HTTPS origin}
+      # Keep false until a trusted TLS ingress controls forwarded headers.
+      TRUST_PROXY_HTTPS: ${TRUST_PROXY_HTTPS:-false}
+      POSTGRES_HOST: db
+      POSTGRES_DB: ${POSTGRES_DB:-flavorbuddy}
+      POSTGRES_USER: ${POSTGRES_USER:-flavorbuddy}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-flavorbuddy}
+      AI_ENABLED: 'false'
+      STARTER_IMAGE_STORAGE: ${STARTER_IMAGE_STORAGE:-local}
+      GS_STARTER_BUCKET_NAME: ${GS_STARTER_BUCKET_NAME:-}
+    restart: unless-stopped

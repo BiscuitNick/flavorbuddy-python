@@ -1,0 +1,225 @@
+[
+  {
+    "image": "",
+    "notes": "",
+    "title": "Coconut Oil Coffee",
+    "author": "front3ndninja",
+    "yields": "1",
+    "favorite": false,
+    "source_url": "https://publicdomainrecipes.com/coconut-oil-coffee/",
+    "total_time": null,
+    "description": "",
+    "ingredients": [
+      "1 cup hot coffee",
+      "1 tbsp coconut oil",
+      "1 tbsp unsalted butter"
+    ],
+    "instructions": [
+      "Blend coffee, coconut oil, and butter together in a blender until oil and butter are melted and coffee is frothy."
+    ],
+    "id": 98,
+    "slug": "coconut-oil-coffee",
+    "provenance": {
+      "path": "content/coconut-oil-coffee.md",
+      "tags": [
+        "drink",
+        "sweet",
+        "breakfast"
+      ],
+      "sha256": "152aeaffdc8eda590e9ee5acc7c59bab65f0b245539f431bc7d2788462959d44",
+      "license": "Unlicense",
+      "revision": "da84378b36bd5b2e3cb35f610d64630bf1bd899d",
+      "repository": "https://github.com/ronaldl29/public-domain-recipes",
+      "source_url": "https://publicdomainrecipes.com/coconut-oil-coffee/",
+      "license_url": "https://github.com/ronaldl29/public-domain-recipes/blob/da84378b36bd5b2e3cb35f610d64630bf1bd899d/LICENSE.md"
+    }
+  },
+  {
+    "image": "",
+    "notes": "",
+    "title": "Fried Potatoes",
+    "author": "themisch",
+    "yields": "",
+    "favorite": false,
+    "source_url": "https://publicdomainrecipes.com/fried-potatoes/",
+    "total_time": null,
+    "description": "",
+    "ingredients": [
+      "Potatoes",
+      "Oil or Crème Fraîche",
+      "Onions"
+    ],
+    "instructions": [
+      "Peel and cut the potatoes to desired size.",
+      "Cut the onions.",
+      "Put a bit of Oil or Crème Fraîche in your pan.",
+      "Put both the potatoes and the onions into the pan.",
+      "Cook them until they're golden-brown.",
+      "Enjoy"
+    ],
+    "id": 150,
+    "slug": "fried-potatoes",
+    "provenance": {
+      "path": "content/fried-potatoes.md",
+      "tags": [
+        "potato",
+        "quick",
+        "side",
+        "fasting"
+      ],
+      "sha256": "a20826f698af20b110b4180b732317907df294a483c4dc13e43b3aac41072f20",
+      "license": "Unlicense",
+      "revision": "da84378b36bd5b2e3cb35f610d64630bf1bd899d",
+      "repository": "https://github.com/ronaldl29/public-domain-recipes",
+      "source_url": "https://publicdomainrecipes.com/fried-potatoes/",
+      "license_url": "https://github.com/ronaldl29/public-domain-recipes/blob/da84378b36bd5b2e3cb35f610d64630bf1bd899d/LICENSE.md"
+    }
+  },
+  {
+    "image": "",
+    "notes": "⏲️ Prep time: 5 min\n\n🍳 Cook time: 5 min",
+    "title": "Irish Coffee",
+    "author": "front3ndninja",
+    "yields": "1",
+    "favorite": false,
+    "source_url": "https://publicdomainrecipes.com/irish-coffee/",
+    "total_time": null,
+    "description": "",
+    "ingredients": [
+      "1 (1.5 fluid ounce) jigger Irish cream liqueur",
+      "1 (1.5 fluid ounce) jigger Irish whiskey",
+      "1 cup hot brewed coffee",
+      "1 tablespoon whipped cream",
+      "1 dash ground nutmeg"
+    ],
+    "instructions": [
+      "In a coffee mug, combine Irish cream and Irish whiskey. Fill mug with coffee. Top with a dab of whipped cream and a dash of nutmeg."
+    ],
+    "id": 192,
+    "slug": "irish-coffee",
+    "provenance": {
+      "path": "content/irish-coffee.md",
+      "tags": [
+        "drink",
+        "sweet",
+        "breakfast"
+      ],
+      "sha256": "0122e940761fcf8666945a9641fc3bb2f8331712a3554b1429396783084b1797",
+      "license": "Unlicense",
+      "revision": "da84378b36bd5b2e3cb35f610d64630bf1bd899d",
+      "repository": "https://github.com/ronaldl29/public-domain-recipes",
+      "source_url": "https://publicdomainrecipes.com/irish-coffee/",
+      "license_url": "https://github.com/ronaldl29/public-domain-recipes/blob/da84378b36bd5b2e3cb35f610d64630bf1bd899d/LICENSE.md"
+    }
+  },
+  {
+    "image": "https://storage.googleapis.com/flavorbuddy-20260906-starter-images/starters/86fb81219b1cf4d93b01362409dd2d5ce4a9bb0990bddc977c5c77b54b494264.webp",
+    "notes": "⏲️ Prep time: 30 min\n\n🍳Cook time: 45 min",
+    "title": "Apple Pie",
+    "author": "mfed3",
+    "yields": "8",
+    "favorite": false,
+    "source_url": "https://publicdomainrecipes.com/apple-pie/",
+    "total_time": null,
+    "description": "",
+    "ingredients": [
+      "Filling: 900 g (4-5) golden delicious apples",
+      "Filling: 15 g (1 tbsp) lemon juice",
+      "Filling: 50 g white sugar",
+      "Filling: 65 g brown sugar",
+      "Filling: 5 g (1 tsp) cinnamon",
+      "Filling: 1-2 g nutmeg",
+      "Filling: 15 g cornstarch",
+      "Filling: 15 g ice water",
+      "Filling: 226 g (2 sticks) cold butter, cut into slices",
+      "Crust: 350 g flour",
+      "Crust: 5 g salt",
+      "Crust: 30 g white sugar",
+      "Crust: 225 g butter",
+      "Crust: 50-100 ml ice water",
+      "Egg Wash: 1 egg (optional)",
+      "Egg Wash: 15 g water (optional)"
+    ],
+    "instructions": [
+      "Peel and cut the apples into 1-2 inch strips",
+      "Put the apples in a bowl and mix in the lemon juice, sugar, cinnamon, nutmeg, and cornstarch and let it sit for 15 mins to release water",
+      "Transfer the filling mixture to a sauce pan and reduce the liquid over medium to low heat for around 15 mins, stirring regularly, then turn off the gas",
+      "While the filling is sitting / reducing, start the crust by putting the flour, salt, sugar, and pieces of butter in a food processor",
+      "Run the food processor until it resembles a coarse sand (5-10 seconds) then start dripping in the ice water until the mixture starts to chunk together",
+      "You'll know when it's done if you can pinch the dough with your hand and it sticks together",
+      "Preheat oven to 350°F then start making the pie crust",
+      "Cut the dough in half and roll both halves out with a rolling pin until they are big enough to cover your pie pan (around 9 inch diameter)",
+      "Put the bottom half dough into the pie pan and cut off the excess dough with a knife",
+      "Dump the sauce pan full of the filling into the pie pan and even it out",
+      "Cover the pie filling with the top dough and fold over and tuck in the excess crust",
+      "Use a fork or your fingers to pinch down the top crust to the bottom crust so you don't have air gaps",
+      "Optionally you can now brush on the egg wash to make the crust get a shiny golden brown color when it cooks",
+      "Cut a few slits in the top crust with a knife to give it a nice design and allow for air to release",
+      "Bake 45 minutes at 350°F or until the crust is brown to your liking and the apples are bubbling inside"
+    ],
+    "id": 7,
+    "slug": "apple-pie",
+    "provenance": {
+      "path": "content/apple-pie.md",
+      "tags": [
+        "dessert",
+        "pie",
+        "sweet",
+        "apple"
+      ],
+      "sha256": "b4248fe327fbaf84c5cc1f36f74e59f7ec17f50590daa098914a23536b4eb29c",
+      "license": "Unlicense",
+      "revision": "da84378b36bd5b2e3cb35f610d64630bf1bd899d",
+      "repository": "https://github.com/ronaldl29/public-domain-recipes",
+      "source_url": "https://publicdomainrecipes.com/apple-pie/",
+      "license_url": "https://github.com/ronaldl29/public-domain-recipes/blob/da84378b36bd5b2e3cb35f610d64630bf1bd899d/LICENSE.md",
+      "image_storage": {
+        "key": "starters/86fb81219b1cf4d93b01362409dd2d5ce4a9bb0990bddc977c5c77b54b494264.webp",
+        "bytes": 106972,
+        "width": 1024,
+        "height": 1024,
+        "sha256": "86fb81219b1cf4d93b01362409dd2d5ce4a9bb0990bddc977c5c77b54b494264",
+        "source_url": "https://publicdomainrecipes.com/pix/apple-pie.webp",
+        "source_sha256": "12c848da8319f6625b6e98484a3500cd8f59caf285dc6bbdab0096e0f5a65a8c"
+      }
+    }
+  },
+  {
+    "image": "",
+    "notes": "",
+    "title": "Lemon juice salad dressing",
+    "author": "martin-chrzanowski",
+    "yields": "",
+    "favorite": false,
+    "source_url": "https://publicdomainrecipes.com/lemon-juice-salad-dressing/",
+    "total_time": null,
+    "description": "A dressing that goes well on lettuce or any other mixed greens.",
+    "ingredients": [
+      "Lemon juice from half a lemon",
+      "Tablespoon of olive oil",
+      "Clove of garlic"
+    ],
+    "instructions": [
+      "Combine lemon juice and oil in small bowl.",
+      "Add salt and pepper to taste.",
+      "Add the garlic, pressed or finely minced.",
+      "Mix well before adding to salad."
+    ],
+    "id": 210,
+    "slug": "lemon-juice-salad-dressing",
+    "provenance": {
+      "path": "content/lemon-juice-salad-dressing.md",
+      "tags": [
+        "salad",
+        "basic",
+        "fasting"
+      ],
+      "sha256": "f5587618200302ca09fe41f8d2f723a82ab6ca953414b41ad42c3bbb5dcd9fee",
+      "license": "Unlicense",
+      "revision": "da84378b36bd5b2e3cb35f610d64630bf1bd899d",
+      "repository": "https://github.com/ronaldl29/public-domain-recipes",
+      "source_url": "https://publicdomainrecipes.com/lemon-juice-salad-dressing/",
+      "license_url": "https://github.com/ronaldl29/public-domain-recipes/blob/da84378b36bd5b2e3cb35f610d64630bf1bd899d/LICENSE.md"
+    }
+  }
+]

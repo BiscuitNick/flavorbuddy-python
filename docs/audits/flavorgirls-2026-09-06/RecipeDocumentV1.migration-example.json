@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0.0",
+  "recipe_id": "8497679c-a3f6-4d6a-9e50-584c4b34918d",
+  "finalized_at": "2026-09-07T02:30:00Z",
+  "title": "Coconut Oil Coffee",
+  "description": null,
+  "language": null,
+  "yield": {
+    "original_text": "1",
+    "quantity": null,
+    "unit": null
+  },
+  "provenance": {
+    "origin": "imported",
+    "sources": [
+      {
+        "id": "src-original",
+        "url": "https://publicdomainrecipes.com/coconut-oil-coffee/",
+        "author": "front3ndninja",
+        "repository_url": "https://github.com/ronaldl29/public-domain-recipes",
+        "repository_revision": "da84378b36bd5b2e3cb35f610d64630bf1bd899d",
+        "path": "content/coconut-oil-coffee.md",
+        "source_sha256": "152aeaffdc8eda590e9ee5acc7c59bab65f0b245539f431bc7d2788462959d44",
+        "license": {
+          "identifier": "Unlicense",
+          "url": "https://github.com/ronaldl29/public-domain-recipes/blob/da84378b36bd5b2e3cb35f610d64630bf1bd899d/LICENSE.md",
+          "rights_basis": "source_license"
+        },
+        "legacy_locator": "starter:coconut-oil-coffee"
+      }
+    ],
+    "inspired_by_recipe_id": null,
+    "original_notes": null
+  },
+  "ingredient_groups": null,
+  "ingredients": [
+    {
+      "id": "ing-coffee",
+      "original_text": "1 cup hot coffee",
+      "name": null,
+      "quantity": null,
+      "unit": null,
+      "preparation": null,
+      "group_id": null,
+      "optional": null,
+      "source_refs": [
+        {
+          "source_id": "src-original",
+          "locator": "legacy content.ingredients[0]"
+        }
+      ]
+    },
+    {
+      "id": "ing-oil",
+      "original_text": "1 tbsp coconut oil",
+      "name": null,
+      "quantity": null,
+      "unit": null,
+      "preparation": null,
+      "group_id": null,
+      "optional": null,
+      "source_refs": [
+        {
+          "source_id": "src-original",
+          "locator": "legacy content.ingredients[1]"
+        }
+      ]
+    },
+    {
+      "id": "ing-butter",
+      "original_text": "1 tbsp unsalted butter",
+      "name": null,
+      "quantity": null,
+      "unit": null,
+      "preparation": null,
+      "group_id": null,
+      "optional": null,
+      "source_refs": [
+        {
+          "source_id": "src-original",
+          "locator": "legacy content.ingredients[2]"
+        }
+      ]
+    }
+  ],
+  "step_groups": null,
+  "steps": [
+    {
+      "id": "step-blend",
+      "position": 1,
+      "original_text": "Blend coffee, coconut oil, and butter together in a blender until oil and butter are melted and coffee is frothy.",
+      "instruction": "Blend coffee, coconut oil, and butter together in a blender until oil and butter are melted and coffee is frothy.",
+      "group_id": null,
+      "ingredient_refs": null,
+      "unresolved_ingredient_text": null,
+      "equipment_refs": null,
+      "unresolved_equipment_text": null,
+      "timers": null,
+      "source_refs": [
+        {
+          "source_id": "src-original",
+          "locator": "legacy content.instructions[0]"
+        }
+      ]
+    }
+  ],
+  "equipment": null,
+  "timing": {
+    "original_text": null,
+    "prep": null,
+    "cook": null,
+    "rest": null,
+    "total": null
+  },
+  "images": [],
+  "tags": null
+}

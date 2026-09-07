@@ -1,0 +1,181 @@
+{
+  "schema_version": "1.0.0",
+  "recipe_id": "196fdf4d-9ed4-4d02-95f6-9d00ea89094f",
+  "finalized_at": "2026-09-07T02:31:00Z",
+  "title": "Coconut Oil Coffee",
+  "description": null,
+  "language": "en",
+  "yield": {
+    "original_text": "1",
+    "quantity": {
+      "kind": "exact",
+      "value": "1"
+    },
+    "unit": null
+  },
+  "provenance": {
+    "origin": "imported",
+    "sources": [
+      {
+        "id": "src-original",
+        "url": "https://publicdomainrecipes.com/coconut-oil-coffee/",
+        "author": "front3ndninja",
+        "repository_url": "https://github.com/ronaldl29/public-domain-recipes",
+        "repository_revision": "da84378b36bd5b2e3cb35f610d64630bf1bd899d",
+        "path": "content/coconut-oil-coffee.md",
+        "source_sha256": "152aeaffdc8eda590e9ee5acc7c59bab65f0b245539f431bc7d2788462959d44",
+        "license": {
+          "identifier": "Unlicense",
+          "url": "https://github.com/ronaldl29/public-domain-recipes/blob/da84378b36bd5b2e3cb35f610d64630bf1bd899d/LICENSE.md",
+          "rights_basis": "source_license"
+        },
+        "legacy_locator": "starter:coconut-oil-coffee"
+      }
+    ],
+    "inspired_by_recipe_id": "8497679c-a3f6-4d6a-9e50-584c4b34918d",
+    "original_notes": null
+  },
+  "ingredient_groups": [],
+  "ingredients": [
+    {
+      "id": "ing-coffee",
+      "original_text": "1 cup hot coffee",
+      "name": "coffee",
+      "quantity": {
+        "kind": "exact",
+        "value": "1"
+      },
+      "unit": {
+        "original_text": "cup",
+        "code": null
+      },
+      "preparation": "hot",
+      "group_id": null,
+      "optional": null,
+      "source_refs": [
+        {
+          "source_id": "src-original",
+          "locator": "legacy content.ingredients[0]"
+        }
+      ]
+    },
+    {
+      "id": "ing-oil",
+      "original_text": "1 tbsp coconut oil",
+      "name": "coconut oil",
+      "quantity": {
+        "kind": "exact",
+        "value": "1"
+      },
+      "unit": {
+        "original_text": "tbsp",
+        "code": null
+      },
+      "preparation": null,
+      "group_id": null,
+      "optional": null,
+      "source_refs": [
+        {
+          "source_id": "src-original",
+          "locator": "legacy content.ingredients[1]"
+        }
+      ]
+    },
+    {
+      "id": "ing-butter",
+      "original_text": "1 tbsp unsalted butter",
+      "name": "unsalted butter",
+      "quantity": {
+        "kind": "exact",
+        "value": "1"
+      },
+      "unit": {
+        "original_text": "tbsp",
+        "code": null
+      },
+      "preparation": null,
+      "group_id": null,
+      "optional": null,
+      "source_refs": [
+        {
+          "source_id": "src-original",
+          "locator": "legacy content.ingredients[2]"
+        }
+      ]
+    }
+  ],
+  "step_groups": [],
+  "steps": [
+    {
+      "id": "step-blend",
+      "position": 1,
+      "original_text": "Blend coffee, coconut oil, and butter together in a blender until oil and butter are melted and coffee is frothy.",
+      "instruction": "Blend coffee, coconut oil, and butter together in a blender until oil and butter are melted and coffee is frothy.",
+      "group_id": null,
+      "ingredient_refs": [
+        {
+          "ingredient_id": "ing-coffee",
+          "portion_quantity": null,
+          "portion_unit": null,
+          "original_text": "coffee"
+        },
+        {
+          "ingredient_id": "ing-oil",
+          "portion_quantity": null,
+          "portion_unit": null,
+          "original_text": "coconut oil"
+        },
+        {
+          "ingredient_id": "ing-butter",
+          "portion_quantity": null,
+          "portion_unit": null,
+          "original_text": "butter"
+        }
+      ],
+      "unresolved_ingredient_text": [],
+      "equipment_refs": [
+        "eq-blender"
+      ],
+      "unresolved_equipment_text": [],
+      "timers": [],
+      "source_refs": [
+        {
+          "source_id": "src-original",
+          "locator": "legacy content.instructions[0]"
+        }
+      ]
+    }
+  ],
+  "equipment": [
+    {
+      "id": "eq-blender",
+      "name": "blender",
+      "original_text": "a blender",
+      "specification": null,
+      "source_refs": [
+        {
+          "source_id": "src-original",
+          "locator": "legacy content.instructions[0]"
+        }
+      ]
+    }
+  ],
+  "timing": {
+    "original_text": null,
+    "prep": null,
+    "cook": null,
+    "rest": null,
+    "total": null
+  },
+  "images": [],
+  "tags": [
+    {
+      "vocabulary": "flavorbuddy-tags/1",
+      "code": "course:drink"
+    },
+    {
+      "vocabulary": "flavorbuddy-tags/1",
+      "code": "course:breakfast"
+    }
+  ]
+}

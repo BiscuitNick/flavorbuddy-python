@@ -1,0 +1,90 @@
+{
+  "method": "\\b(?:servings?\\s*:\\s*\\d|serves?\\s+(?:(?:around|about)\\s+)?\\d|yield\\s*:\\s*\\d|makes?\\s+(?:(?:about|around)\\s+)?\\d)",
+  "count": 12,
+  "candidates": [
+    {
+      "id": 15,
+      "slug": "babas-feta-pasta",
+      "lines": [
+        "Serves Around 3 People. You can scale up to 4 If you increase most quantities by +1/4."
+      ]
+    },
+    {
+      "id": 24,
+      "slug": "banana-oatmeal-cookies",
+      "lines": [
+        "- 🍽️ Serving : 3"
+      ]
+    },
+    {
+      "id": 41,
+      "slug": "blueberry-muffins",
+      "lines": [
+        "🍽️ Servings: 12"
+      ]
+    },
+    {
+      "id": 56,
+      "slug": "butter-cake",
+      "lines": [
+        "🍽️ Servings: 8-10"
+      ]
+    },
+    {
+      "id": 178,
+      "slug": "hamburger-patties-all-beef",
+      "lines": [
+        "🍽️ Servings: 4 patties"
+      ]
+    },
+    {
+      "id": 179,
+      "slug": "hamburger-patties",
+      "lines": [
+        "🍽️ Servings: 6 patties"
+      ]
+    },
+    {
+      "id": 181,
+      "slug": "hearty-breakfast-oatmeal",
+      "lines": [
+        "- 🍽️ Serving: 1 hearty serving"
+      ]
+    },
+    {
+      "id": 223,
+      "slug": "maque-choux",
+      "lines": [
+        "5. Serve. (Serves 4-6)"
+      ]
+    },
+    {
+      "id": 237,
+      "slug": "mushroom-stragonov",
+      "lines": [
+        "Servings: 2"
+      ]
+    },
+    {
+      "id": 316,
+      "slug": "salsa-verde",
+      "lines": [
+        "Makes about 2 cups (475mL). Refrigerate leftovers"
+      ]
+    },
+    {
+      "id": 335,
+      "slug": "simple-chicken-curry",
+      "lines": [
+        "Servings: 3-4"
+      ]
+    },
+    {
+      "id": 386,
+      "slug": "tofu-stir-fry",
+      "lines": [
+        "Serves 3 to 5."
+      ]
+    }
+  ]
+}

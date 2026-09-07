@@ -1,0 +1,20 @@
+{
+  "valid_examples": 2,
+  "valid_timer_shape_fixture": 1,
+  "negative_cases_rejected": [
+    "unknown schema version",
+    "missing title",
+    "invalid recipe UUID",
+    "obsolete revision object",
+    "self-declared feedback totals",
+    "uncontrolled tag",
+    "duplicate ingredient IDs",
+    "dangling ingredient reference",
+    "dangling equipment reference",
+    "step position gap",
+    "inverted quantity range",
+    "zero ingredient amount",
+    "automatic timer start"
+  ],
+  "limitations": "No database immutability, publication/availability authorization, culinary correctness, schema migration or withdrawal API implementation is tested by these proposal checks."
+}

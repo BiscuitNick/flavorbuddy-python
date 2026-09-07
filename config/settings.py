@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
+from urllib.parse import urlsplit
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,69 +40,136 @@ def load_env_file(path: Path) -> None:
 load_env_file(BASE_DIR / ".env")
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+from django.core.exceptions import ImproperlyConfigured
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-z6u@s_vs3qfm9r52bex0ga-c6=%s5b0-35k8@_pisqo^9km8y4'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+def env_bool(name, default=False):
+    value = os.environ.get(name, str(default)).lower()
+    if value not in {"true", "false", "1", "0"}:
+        raise ImproperlyConfigured(f"{name} must be true or false")
+    return value in {"true", "1"}
 
+
+ENVIRONMENT = os.environ.get("DJANGO_ENV", "development")
+if ENVIRONMENT not in {"development", "test", "production"}:
+    raise ImproperlyConfigured("DJANGO_ENV must be development, test, or production")
+PRODUCTION = ENVIRONMENT == "production"
+DEBUG = env_bool("DJANGO_DEBUG", not PRODUCTION)
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY") or (
+    "" if PRODUCTION else "local-development-only-flavorbuddy-key"
+)
+ALLOWED_HOSTS = [
+    v.strip()
+    for v in os.environ.get(
+        "DJANGO_ALLOWED_HOSTS", "" if PRODUCTION else "localhost,127.0.0.1,testserver"
+    ).split(",")
+    if v.strip()
+]
 PROJECT_URL = os.environ.get("PROJECT_URL", "http://localhost:8000")
-
-ALLOWED_HOSTS = []
-
+if PRODUCTION and (
+    DEBUG
+    or len(SECRET_KEY) < 50
+    or not ALLOWED_HOSTS
+    or "*" in ALLOWED_HOSTS
+    or not PROJECT_URL.startswith("https://")
+):
+    raise ImproperlyConfigured(
+        "Production requires debug off, a 50+ character secret, explicit hosts and an HTTPS PROJECT_URL"
+    )
+if PRODUCTION:
+    origin = urlsplit(PROJECT_URL)
+    if (
+        not origin.hostname
+        or origin.username
+        or origin.password
+        or origin.query
+        or origin.fragment
+        or origin.path not in ("", "/")
+        or origin.hostname not in ALLOWED_HOSTS
+    ):
+        raise ImproperlyConfigured(
+            "PROJECT_URL must be an HTTPS origin matching an allowed host"
+        )
+PROJECT_URL = PROJECT_URL.rstrip("/")
+CSRF_TRUSTED_ORIGINS = [PROJECT_URL] if PRODUCTION else []
+SESSION_COOKIE_SECURE = PRODUCTION
+CSRF_COOKIE_SECURE = PRODUCTION
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+SECURE_SSL_REDIRECT = PRODUCTION
+SECURE_HSTS_SECONDS = 31536000 if PRODUCTION else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = PRODUCTION
+SECURE_HSTS_PRELOAD = PRODUCTION
+if env_bool("TRUST_PROXY_HTTPS"):
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+DATA_UPLOAD_MAX_MEMORY_SIZE = 262144
+CSRF_FAILURE_VIEW = "config.health.csrf_failure"
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'scrape_me.apps.ScrapeMeConfig',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "scrape_me.apps.ScrapeMeConfig",
+    "rest_framework",
+    "oauth2_provider",
+    "integrations",
+    "kitchen",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "config.middleware.PrivateAPIMiddleware",
+    "integrations.middleware.AuditMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_DB", "flavorbuddy"),
+        "USER": os.environ.get("POSTGRES_USER", "flavorbuddy"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "flavorbuddy"),
+        "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
+        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        "OPTIONS": {
+            "connect_timeout": 5,
+            "options": "-c statement_timeout=10000",
+            "sslmode": os.environ.get("POSTGRES_SSLMODE", "prefer"),
+        },
     }
 }
 
@@ -111,16 +179,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -128,9 +196,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -140,9 +208,131 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    },
+}
+REST_FRAMEWORK = {
+    "DEFAULT_PARSER_CLASSES": ["scrape_me.api.parsers.BoundedJSONParser"],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication"
+    ],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "EXCEPTION_HANDLER": "scrape_me.api.errors.exception_handler",
+    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+}
+AI_ENABLED = env_bool("AI_ENABLED")
+AI_USER_DAILY_LIMIT = int(os.environ.get("AI_USER_DAILY_LIMIT", "0"))
+AI_GLOBAL_DAILY_LIMIT = int(os.environ.get("AI_GLOBAL_DAILY_LIMIT", "0"))
+EMAIL_BACKEND = os.environ.get(
+    "EMAIL_BACKEND", "django.core.mail.backends.locmem.EmailBackend"
+)
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "noreply@localhost")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", True)
+
+STATICFILES_DIRS = (
+    [("app", BASE_DIR / "frontend" / "dist")]
+    if (BASE_DIR / "frontend" / "dist").exists()
+    else []
+)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {
+        "flavorbuddy": {"handlers": ["console"], "level": "INFO", "propagate": False}
+    },
+}
+
+# Public, licensed starter media only. Private uploads must use a separate backend.
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
+STARTER_IMAGE_STORAGE = os.environ.get("STARTER_IMAGE_STORAGE", "local")
+if STARTER_IMAGE_STORAGE == "gcs":
+    bucket = os.environ.get("GS_STARTER_BUCKET_NAME", "")
+    if not bucket:
+        raise ImproperlyConfigured("GS_STARTER_BUCKET_NAME is required for gcs storage")
+    STORAGES["starter_images"] = {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "OPTIONS": {
+            "bucket_name": bucket,
+            "default_acl": None,
+            "querystring_auth": False,
+            "object_parameters": {"cache_control": "public, max-age=31536000, immutable"},
+        },
+    }
+elif STARTER_IMAGE_STORAGE == "local":
+    STORAGES["starter_images"] = {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {"location": MEDIA_ROOT, "base_url": PROJECT_URL + MEDIA_URL},
+    }
+else:
+    raise ImproperlyConfigured("STARTER_IMAGE_STORAGE must be local or gcs")
+
+# App-only access is deliberately separate from the session-authenticated API.
+CATALOG_AUDIENCE = PROJECT_URL + "/api/integrations/v1/"
+APP_GLOBAL_DAILY_LIMIT = int(os.environ.get("APP_GLOBAL_DAILY_LIMIT", "10000"))
+APP_TOKEN_MINUTE_LIMIT = int(os.environ.get("APP_TOKEN_MINUTE_LIMIT", "60"))
+OAUTH2_PROVIDER = {
+    "OAUTH2_VALIDATOR_CLASS": "integrations.auth.CatalogValidator",
+    "ACCESS_TOKEN_EXPIRE_SECONDS": 300,
+    "COMPLIANT_BCP_RFC9700_TOKEN_STORAGE": True,
+    "COMPLIANT_BCP_RFC9700_ACCESS_TOKEN_TRANSPORT": True,
+    "SCOPES": {"catalog:read": "Read explicitly approved starter catalogs"},
+    "DEFAULT_SCOPES": ["catalog:read"],
+    "ALLOW_URI_WILDCARDS": False,
+}
+EMAIL_TIMEOUT = 10
+OAUTH2_PROVIDER_APPLICATION_MODEL = 'oauth2_provider.Application'
+OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = 'oauth2_provider.AccessToken'
+OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'oauth2_provider.RefreshToken'
+OAUTH2_PROVIDER_GRANT_MODEL = 'oauth2_provider.Grant'
+
+# Private originals are never exposed through MEDIA_URL or starter_images.
+PRIVATE_PHOTO_UPLOAD_BYTES = 8 * 1024 * 1024
+PRIVATE_PHOTO_STORAGE_BYTES = int(os.environ.get("PRIVATE_PHOTO_STORAGE_BYTES", str(25 * 1024 * 1024)))
+PRIVATE_PHOTO_COUNT = int(os.environ.get("PRIVATE_PHOTO_COUNT", "25"))
+PRIVATE_PHOTO_BACKEND = os.environ.get("PRIVATE_PHOTO_BACKEND", "disabled" if PRODUCTION else "local")
+if PRIVATE_PHOTO_BACKEND == "gcs":
+    private_bucket = os.environ.get("GS_PRIVATE_BUCKET_NAME", "")
+    if not private_bucket or private_bucket == os.environ.get("GS_STARTER_BUCKET_NAME"):
+        raise ImproperlyConfigured("Private photos require a separate private bucket")
+    STORAGES["private_photos"] = {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "OPTIONS": {"bucket_name": private_bucket, "default_acl": None, "querystring_auth": True, "timeout": 30},
+    }
+elif PRIVATE_PHOTO_BACKEND == "local" and not PRODUCTION:
+    STORAGES["private_photos"] = {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {"location": BASE_DIR / "private-media", "base_url": None},
+    }
+elif PRIVATE_PHOTO_BACKEND != "disabled":
+    raise ImproperlyConfigured("Production private photos require separate GCS storage or disabled")
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024
+DATA_UPLOAD_MAX_NUMBER_FILES = 1
+FILE_UPLOAD_HANDLERS = [
+    'kitchen.uploads.BoundedUploadHandler',
+    'django.core.files.uploadhandler.MemoryFileUploadHandler',
+    'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+]
+
+CAPTURE_PROVIDER = os.environ.get("CAPTURE_PROVIDER", "disabled")
+if CAPTURE_PROVIDER not in {"disabled", "fixture"}:
+    raise ImproperlyConfigured("Only disabled or fixture capture is implemented")
+CAPTURE_GLOBAL_DAILY_LIMIT = int(os.environ.get("CAPTURE_GLOBAL_DAILY_LIMIT", "30"))

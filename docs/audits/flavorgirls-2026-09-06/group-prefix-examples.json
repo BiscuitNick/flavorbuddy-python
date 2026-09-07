@@ -1,0 +1,874 @@
+[
+  {
+    "id": 7,
+    "slug": "apple-pie",
+    "items": [
+      {
+        "index": 0,
+        "text": "Filling: 900 g (4-5) golden delicious apples"
+      },
+      {
+        "index": 1,
+        "text": "Filling: 15 g (1 tbsp) lemon juice"
+      },
+      {
+        "index": 2,
+        "text": "Filling: 50 g white sugar"
+      },
+      {
+        "index": 3,
+        "text": "Filling: 65 g brown sugar"
+      },
+      {
+        "index": 4,
+        "text": "Filling: 5 g (1 tsp) cinnamon"
+      },
+      {
+        "index": 5,
+        "text": "Filling: 1-2 g nutmeg"
+      },
+      {
+        "index": 6,
+        "text": "Filling: 15 g cornstarch"
+      },
+      {
+        "index": 7,
+        "text": "Filling: 15 g ice water"
+      },
+      {
+        "index": 8,
+        "text": "Filling: 226 g (2 sticks) cold butter, cut into slices"
+      },
+      {
+        "index": 9,
+        "text": "Crust: 350 g flour"
+      },
+      {
+        "index": 10,
+        "text": "Crust: 5 g salt"
+      },
+      {
+        "index": 11,
+        "text": "Crust: 30 g white sugar"
+      },
+      {
+        "index": 12,
+        "text": "Crust: 225 g butter"
+      },
+      {
+        "index": 13,
+        "text": "Crust: 50-100 ml ice water"
+      },
+      {
+        "index": 14,
+        "text": "Egg Wash: 1 egg (optional)"
+      },
+      {
+        "index": 15,
+        "text": "Egg Wash: 15 g water (optional)"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "slug": "asian-style-chicken-sticky-sauce",
+    "items": [
+      {
+        "index": 0,
+        "text": "Chicken with crispy coating: Around 14 ounces or 400 grams of chicken breast"
+      },
+      {
+        "index": 1,
+        "text": "Chicken with crispy coating: 1 Egg"
+      },
+      {
+        "index": 2,
+        "text": "Chicken with crispy coating: 3 tbsp of cornflour"
+      },
+      {
+        "index": 3,
+        "text": "Chicken with crispy coating: 10 tbsp all-purpose flour"
+      },
+      {
+        "index": 4,
+        "text": "Chicken with crispy coating: 1/2 tsp garlic powder"
+      },
+      {
+        "index": 5,
+        "text": "Chicken with crispy coating: 2 tsp paprika powder"
+      },
+      {
+        "index": 6,
+        "text": "Chicken with crispy coating: Around 5 tbsp of sesame oil for frying the chicken"
+      },
+      {
+        "index": 7,
+        "text": "Sauce: 1 tbsp sesame oil"
+      },
+      {
+        "index": 8,
+        "text": "Sauce: 2 garlic cloves, mashed to paste."
+      },
+      {
+        "index": 9,
+        "text": "Sauce: 1 tbsp Chinese rice vinegar or alternatively white wine vinegar"
+      },
+      {
+        "index": 10,
+        "text": "Sauce: 3 tbsp honey"
+      },
+      {
+        "index": 11,
+        "text": "Sauce: 2 tbsp ketchup"
+      },
+      {
+        "index": 12,
+        "text": "Sauce: 2 tbsp brown sugar"
+      },
+      {
+        "index": 13,
+        "text": "Sauce: 4 tbsp soy sauce"
+      }
+    ]
+  },
+  {
+    "id": 144,
+    "slug": "francesinha",
+    "items": [
+      {
+        "index": 0,
+        "text": "Based Ingredients: bread"
+      },
+      {
+        "index": 1,
+        "text": "Based Ingredients: linguiça (type of Portuguese sausage)"
+      },
+      {
+        "index": 2,
+        "text": "Based Ingredients: ham"
+      },
+      {
+        "index": 3,
+        "text": "Based Ingredients: Portuguese cheese"
+      },
+      {
+        "index": 4,
+        "text": "Based Ingredients: beef meat"
+      },
+      {
+        "index": 5,
+        "text": "Sauce Ingredients: blonde beer"
+      },
+      {
+        "index": 6,
+        "text": "Sauce Ingredients: fried tomato sauce"
+      },
+      {
+        "index": 7,
+        "text": "Sauce Ingredients: port wine"
+      },
+      {
+        "index": 8,
+        "text": "Sauce Ingredients: beef broth"
+      },
+      {
+        "index": 9,
+        "text": "Sauce Ingredients: salted butter"
+      },
+      {
+        "index": 10,
+        "text": "Sauce Ingredients: onion"
+      },
+      {
+        "index": 11,
+        "text": "Sauce Ingredients: minced garlic"
+      },
+      {
+        "index": 12,
+        "text": "Sauce Ingredients: cornstarch"
+      },
+      {
+        "index": 13,
+        "text": "Sauce Ingredients: olive oil"
+      },
+      {
+        "index": 14,
+        "text": "Sauce Ingredients: piripiri (Portuguese chili)"
+      }
+    ]
+  },
+  {
+    "id": 195,
+    "slug": "italian-mulled-wine",
+    "items": [
+      {
+        "index": 0,
+        "text": "Crushed Ingredients: 1 star anise"
+      },
+      {
+        "index": 1,
+        "text": "Crushed Ingredients: 1 bay leaf"
+      },
+      {
+        "index": 2,
+        "text": "Crushed Ingredients: 1 pinch rosemary"
+      },
+      {
+        "index": 3,
+        "text": "Crushed Ingredients: 1 pinch peppercorn"
+      },
+      {
+        "index": 4,
+        "text": "Crushed Ingredients: 1 pinch thyme"
+      },
+      {
+        "index": 5,
+        "text": "Crushed Ingredients: 1 pinch red pepper"
+      },
+      {
+        "index": 6,
+        "text": "Crushed Ingredients: 1 pinch fennel seeds"
+      },
+      {
+        "index": 7,
+        "text": "Crushed Ingredients: 1 pinch cloves"
+      },
+      {
+        "index": 8,
+        "text": "Crushed Ingredients: 1 pinch nutmeg"
+      },
+      {
+        "index": 9,
+        "text": "Non-Crushed Ingredients: 1 bottle Italian red wine"
+      },
+      {
+        "index": 10,
+        "text": "Non-Crushed Ingredients: 1 orange"
+      },
+      {
+        "index": 11,
+        "text": "Non-Crushed Ingredients: 1 lemon"
+      },
+      {
+        "index": 12,
+        "text": "Non-Crushed Ingredients: 1 tbsp honey"
+      },
+      {
+        "index": 13,
+        "text": "Non-Crushed Ingredients: 1 tsp vanilla"
+      },
+      {
+        "index": 14,
+        "text": "Non-Crushed Ingredients: 1 stick cinnamon"
+      },
+      {
+        "index": 15,
+        "text": "Non-Crushed Ingredients: 4 figs (optional)"
+      },
+      {
+        "index": 16,
+        "text": "Non-Crushed Ingredients: 100 ml limoncello (optional)"
+      },
+      {
+        "index": 17,
+        "text": "Non-Crushed Ingredients: 50 ml sweet vermouth (optional)"
+      },
+      {
+        "index": 18,
+        "text": "Non-Crushed Ingredients: 50 ml bourbon, brandy, or cognac (optional)"
+      }
+    ]
+  },
+  {
+    "id": 222,
+    "slug": "mapo-tofu",
+    "items": [
+      {
+        "index": 0,
+        "text": "Marinated Pork: 450 g (1 lb) ground pork"
+      },
+      {
+        "index": 1,
+        "text": "Marinated Pork: 1 tbsp soy sauce"
+      },
+      {
+        "index": 2,
+        "text": "Marinated Pork: 1 tbsp Shaoxing cooking wine"
+      },
+      {
+        "index": 3,
+        "text": "Marinated Pork: 1 tsp cornstarch"
+      },
+      {
+        "index": 4,
+        "text": "Marinated Pork: 1 tsp white pepper powder"
+      },
+      {
+        "index": 5,
+        "text": "Braise: 2 tbsp spicy doubanjiang (la doubanjiang)"
+      },
+      {
+        "index": 6,
+        "text": "Braise: 1 tsp dou-chi"
+      },
+      {
+        "index": 7,
+        "text": "Braise: 2-3 chopped scallions white and green separated)"
+      },
+      {
+        "index": 8,
+        "text": "Braise: 2-4 minced garlic cloves"
+      },
+      {
+        "index": 9,
+        "text": "Braise: 2 inch minced ginger (similar amount as garlic)"
+      },
+      {
+        "index": 10,
+        "text": "Braise: 400 ml chicken broth or water"
+      },
+      {
+        "index": 11,
+        "text": "Braise: 340 g (1 package) soft tofu cut into 1.5cm (1/2 inch cubes)"
+      },
+      {
+        "index": 12,
+        "text": "Braise: 1 tbsp Sichuan peppercorns crushed"
+      }
+    ]
+  },
+  {
+    "id": 269,
+    "slug": "pastitsio",
+    "items": [
+      {
+        "index": 0,
+        "text": "Pasta layer: 600g penne rigate"
+      },
+      {
+        "index": 1,
+        "text": "Pasta layer: salted water"
+      },
+      {
+        "index": 2,
+        "text": "Meat layer: 1 large onion, finely diced"
+      },
+      {
+        "index": 3,
+        "text": "Meat layer: 700g lean ground beef"
+      },
+      {
+        "index": 4,
+        "text": "Meat layer: .5 TB ground allspice"
+      },
+      {
+        "index": 5,
+        "text": "Meat layer: .5 TB ground cinnamon"
+      },
+      {
+        "index": 6,
+        "text": "Meat layer: .25 TSP ground clove (optional)"
+      },
+      {
+        "index": 7,
+        "text": "Meat layer: 340g tomato paste"
+      },
+      {
+        "index": 8,
+        "text": "Béchamel layer: 226g butter"
+      },
+      {
+        "index": 9,
+        "text": "Béchamel layer: 226g flour"
+      },
+      {
+        "index": 10,
+        "text": "Béchamel layer: 1L cold milk"
+      },
+      {
+        "index": 11,
+        "text": "Béchamel layer: 237ml chicken stock"
+      },
+      {
+        "index": 12,
+        "text": "Béchamel layer: freshly grated nutmeg (optional)"
+      },
+      {
+        "index": 13,
+        "text": "Béchamel layer: grated cheese (optional)"
+      }
+    ]
+  },
+  {
+    "id": 270,
+    "slug": "pate-chinois",
+    "items": [
+      {
+        "index": 0,
+        "text": "Mashed potatoes layer: 1½ lb of potatoes or around 6 big one, peeled and diced"
+      },
+      {
+        "index": 1,
+        "text": "Mashed potatoes layer: 2 tbsp of butter"
+      },
+      {
+        "index": 2,
+        "text": "Mashed potatoes layer: ½ cup milk"
+      },
+      {
+        "index": 3,
+        "text": "Mashed potatoes layer: 1 tsp of  herbs de Provence or dried parsley"
+      },
+      {
+        "index": 4,
+        "text": "Mashed potatoes layer: (optional) ½ cup of strong cheddar cheese, grated"
+      },
+      {
+        "index": 5,
+        "text": "Mashed potatoes layer: Pinch of nutmeg"
+      },
+      {
+        "index": 6,
+        "text": "Mashed potatoes layer: Paprika"
+      },
+      {
+        "index": 7,
+        "text": "Beef layer: 1 tbsp of butter"
+      },
+      {
+        "index": 8,
+        "text": "Beef layer: 1 lb of ground beef"
+      },
+      {
+        "index": 9,
+        "text": "Beef layer: 1 onion, diced"
+      },
+      {
+        "index": 10,
+        "text": "Beef layer: 1 tbsp of soya sauce"
+      },
+      {
+        "index": 11,
+        "text": "Beef layer: 1 tbsp of herbs de Provence"
+      },
+      {
+        "index": 12,
+        "text": "Beef layer: 1 tsp of Worcestershire sauce"
+      },
+      {
+        "index": 13,
+        "text": "Corn layer: 1 small can (around 14oz) of whole kernel corn"
+      },
+      {
+        "index": 14,
+        "text": "Corn layer: 1 small can (around 14oz) of cream style corn"
+      }
+    ]
+  },
+  {
+    "id": 287,
+    "slug": "potato-and-eggplant-curry",
+    "items": [
+      {
+        "index": 11,
+        "text": "Optional extras: carrots"
+      },
+      {
+        "index": 12,
+        "text": "Optional extras: red peppers (capsicums)"
+      },
+      {
+        "index": 13,
+        "text": "Optional extras: paneer"
+      }
+    ]
+  },
+  {
+    "id": 301,
+    "slug": "ragu-napoletano",
+    "items": [
+      {
+        "index": 0,
+        "text": "Tomato Sauce: 6-10 lbs San Marzano plum tomatoes (fresh or canned peeled)"
+      },
+      {
+        "index": 1,
+        "text": "Tomato Sauce: Tomato paste (optional)"
+      },
+      {
+        "index": 2,
+        "text": "Aromatics and Herbs: 8 cloves garlic"
+      },
+      {
+        "index": 3,
+        "text": "Aromatics and Herbs: 1.5 white onions"
+      },
+      {
+        "index": 4,
+        "text": "Aromatics and Herbs: 6-8 oz red wine"
+      },
+      {
+        "index": 5,
+        "text": "Aromatics and Herbs: 8 fresh basil leaves"
+      },
+      {
+        "index": 6,
+        "text": "Aromatics and Herbs: Dry oregano"
+      },
+      {
+        "index": 7,
+        "text": "Aromatics and Herbs: Red pepper"
+      },
+      {
+        "index": 8,
+        "text": "Meat: 1-2 lb pork tenderloin"
+      },
+      {
+        "index": 9,
+        "text": "Meat: 1-2 lb sweet and or spicy Italian sausage"
+      },
+      {
+        "index": 10,
+        "text": "Meat: 1 lb cubed stewing beef (chuck, short rib, or oxtail)"
+      },
+      {
+        "index": 11,
+        "text": "Meatballs: 1-2 lb total of ground beef chuck, veal, and pork"
+      },
+      {
+        "index": 12,
+        "text": "Meatballs: 1 1/2 cups grated Pecorino Romano cheese"
+      },
+      {
+        "index": 13,
+        "text": "Meatballs: 1 1/2 cups breadcrumbs (baked stale bread, oregano, salt and pepper pulsed in a food processor)"
+      },
+      {
+        "index": 14,
+        "text": "Meatballs: 2-3 eggs"
+      },
+      {
+        "index": 15,
+        "text": "Meatballs: Splash of milk"
+      },
+      {
+        "index": 16,
+        "text": "Meatballs: Handfull of fresh parsley chopped"
+      },
+      {
+        "index": 17,
+        "text": "Meatballs: Sprig of fresh basil chopped"
+      },
+      {
+        "index": 18,
+        "text": "Meatballs: 1/2 onion minced"
+      },
+      {
+        "index": 19,
+        "text": "Meatballs: 4-8 cloves garlic minced"
+      }
+    ]
+  },
+  {
+    "id": 304,
+    "slug": "ravioli",
+    "items": [
+      {
+        "index": 0,
+        "text": "Dough: 4 eggs"
+      },
+      {
+        "index": 1,
+        "text": "Dough: 400 g 00 flour"
+      },
+      {
+        "index": 2,
+        "text": "Dough: Drizzle of olive oil"
+      },
+      {
+        "index": 3,
+        "text": "Cheese Filling: 1 lemon"
+      },
+      {
+        "index": 4,
+        "text": "Cheese Filling: 50 g grated Pecorino Romano cheese"
+      },
+      {
+        "index": 5,
+        "text": "Cheese Filling: 250 g ricotta"
+      },
+      {
+        "index": 6,
+        "text": "Cheese Filling: 1 egg"
+      },
+      {
+        "index": 7,
+        "text": "Seafood Fillings: Chopped leftover lobster legs, lobster tail, or minced crab (optional)"
+      }
+    ]
+  },
+  {
+    "id": 319,
+    "slug": "sardine-cakes",
+    "items": [
+      {
+        "index": 0,
+        "text": "Sardine Fish Cakes: 2 tins sardines (~4oz)"
+      },
+      {
+        "index": 1,
+        "text": "Sardine Fish Cakes: ½ cup mayonnaise"
+      },
+      {
+        "index": 2,
+        "text": "Sardine Fish Cakes: ½ cup Panko breadcrumbs"
+      },
+      {
+        "index": 3,
+        "text": "Sardine Fish Cakes: 2 teaspoons Old Bay seasoning"
+      },
+      {
+        "index": 4,
+        "text": "Sardine Fish Cakes: 1 egg"
+      },
+      {
+        "index": 5,
+        "text": "Sardine Fish Cakes: lemon juice (optional)"
+      },
+      {
+        "index": 6,
+        "text": "Spicy Yogurt Sauce: ½ cup plain yogurt (whole milk)"
+      },
+      {
+        "index": 7,
+        "text": "Spicy Yogurt Sauce: 1 tablespoon sriracha"
+      },
+      {
+        "index": 8,
+        "text": "Spicy Yogurt Sauce: 1 tablespoon Dijon mustard"
+      },
+      {
+        "index": 9,
+        "text": "Spicy Yogurt Sauce: 1 teaspoon Worcestershire sauce"
+      },
+      {
+        "index": 10,
+        "text": "Spicy Yogurt Sauce: minced garlic (optional)"
+      }
+    ]
+  },
+  {
+    "id": 344,
+    "slug": "sourdough-bread-with-seeds-and-grains",
+    "items": [
+      {
+        "index": 0,
+        "text": "For the preparation: 100g grain of choice (e.g. rye, spelt and wheat)"
+      },
+      {
+        "index": 1,
+        "text": "For the preparation: 40g linseed"
+      },
+      {
+        "index": 2,
+        "text": "For the preparation: 30g sesame"
+      },
+      {
+        "index": 3,
+        "text": "For the preparation: 30g sunflower seeds"
+      },
+      {
+        "index": 4,
+        "text": "For the preparation: 600g water"
+      },
+      {
+        "index": 5,
+        "text": "For the bread: 400g sourdough"
+      },
+      {
+        "index": 6,
+        "text": "For the bread: 200g water (25-35°C)"
+      },
+      {
+        "index": 7,
+        "text": "For the bread: 200g rye flour"
+      },
+      {
+        "index": 8,
+        "text": "For the bread: 300g wheat flour"
+      },
+      {
+        "index": 9,
+        "text": "For the bread: 20g sea salt"
+      },
+      {
+        "index": 10,
+        "text": "For the bread: 2tsp bread spice"
+      },
+      {
+        "index": 11,
+        "text": "For the bread: soaked seeds and grains"
+      }
+    ]
+  },
+  {
+    "id": 351,
+    "slug": "spaghetti-and-meatballs",
+    "items": [
+      {
+        "index": 0,
+        "text": "For the sauce: ½ chopped sweet yellow onion"
+      },
+      {
+        "index": 1,
+        "text": "For the sauce: 3 cloves chopped garlic"
+      },
+      {
+        "index": 2,
+        "text": "For the sauce: 1 cup finely chopped carrots"
+      },
+      {
+        "index": 3,
+        "text": "For the sauce: 1 cup chopped cremini brown mushrooms"
+      },
+      {
+        "index": 4,
+        "text": "For the sauce: 2 cans (28 oz.) Italian plum tomatoes"
+      },
+      {
+        "index": 5,
+        "text": "For the sauce: ¼ cup chopped fresh Italian parsley"
+      },
+      {
+        "index": 6,
+        "text": "For the sauce: ¼ cup chopped fresh basil"
+      },
+      {
+        "index": 7,
+        "text": "For the sauce: 3 tbsp. tomato paste"
+      },
+      {
+        "index": 8,
+        "text": "For the sauce: ¼ cup grated Parmesan-Romano cheese blend"
+      },
+      {
+        "index": 9,
+        "text": "For the sauce: ¼ cup red wine (optional)"
+      },
+      {
+        "index": 10,
+        "text": "For the meatballs: 1 lb. ground beef"
+      },
+      {
+        "index": 11,
+        "text": "For the meatballs: ½ lb. fresh bulk Italian style pork sausage"
+      },
+      {
+        "index": 12,
+        "text": "For the meatballs: 2 tbsp. finely chopped basil"
+      },
+      {
+        "index": 13,
+        "text": "For the meatballs: 2 tbsp. finely chopped Italian parsley"
+      },
+      {
+        "index": 14,
+        "text": "For the meatballs: ½ cup finely chopped cremini brown mushrooms"
+      },
+      {
+        "index": 15,
+        "text": "For the meatballs: 2 large eggs"
+      },
+      {
+        "index": 16,
+        "text": "For the meatballs: ¾ cup unseasoned breadcrumbs"
+      },
+      {
+        "index": 17,
+        "text": "For the meatballs: ¼ cup grated Parmesan-Romano cheese blend"
+      },
+      {
+        "index": 18,
+        "text": "For the meatballs: Red wine (optional)"
+      },
+      {
+        "index": 19,
+        "text": "For the pasta: 1 ½ lb. dry spaghetti"
+      }
+    ]
+  },
+  {
+    "id": 407,
+    "slug": "yibin-burning-noodles",
+    "items": [
+      {
+        "index": 0,
+        "text": "Yibin Chili Oil: Sichuan ground chilies, 1/3 cup"
+      },
+      {
+        "index": 1,
+        "text": "Yibin Chili Oil: Roasted rapeseed oil (caizi you) or Chinese peanut oil, 2/3 cup"
+      },
+      {
+        "index": 2,
+        "text": "Yibin Chili Oil: Peeled and smashed ginger, 2 inches"
+      },
+      {
+        "index": 3,
+        "text": "Yibin Chili Oil: Cassia bark (or cinnamon stick), 2 inches"
+      },
+      {
+        "index": 4,
+        "text": "Yibin Chili Oil: Star anise, 2"
+      },
+      {
+        "index": 5,
+        "text": "Yibin Chili Oil: Chinese black cardamom (optional), 1"
+      },
+      {
+        "index": 6,
+        "text": "Yibin Chili Oil: Sichuan peppercorn, 1 tsp"
+      },
+      {
+        "index": 7,
+        "text": "Yibin Chili Oil: Roughly chopped walnut pieces, 2 tbsp"
+      },
+      {
+        "index": 8,
+        "text": "Yibin Chili Oil: High-quality melted pork lard, 1/3 cup"
+      },
+      {
+        "index": 9,
+        "text": "Noodles: Fresh alkaline noodles, 150g"
+      },
+      {
+        "index": 10,
+        "text": "Noodles: Yibin Chili Oil , 2 tbsp"
+      },
+      {
+        "index": 11,
+        "text": "Noodles: Light soy sauce, 1 tbsp"
+      },
+      {
+        "index": 12,
+        "text": "Noodles: White sesame oil, 1 tbsp"
+      },
+      {
+        "index": 13,
+        "text": "Noodles: Toasted yacai, 2 tbsp"
+      },
+      {
+        "index": 14,
+        "text": "Noodles: Mixed toasted crushed peanuts/sesame, 2 tbsp"
+      },
+      {
+        "index": 15,
+        "text": "Noodles: Sliced scallion greens, 2 tbsp"
+      },
+      {
+        "index": 16,
+        "text": "Noodles: MSG, 1/4 tbsp"
+      }
+    ]
+  }
+]

@@ -1,0 +1,15 @@
+.git
+.env
+.venv
+frontend/node_modules
+staticfiles
+__pycache__
+*.pyc
+frontend/dist
+frontend/test-results
+frontend/playwright-report
+media/
+
+private-media/
+**/.terraform/
+**/*.tfstate*
